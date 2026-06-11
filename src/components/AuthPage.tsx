@@ -5,7 +5,6 @@ import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/lib/auth-context";
@@ -18,6 +17,11 @@ export function AuthPage({ mode }: { mode: "signin" | "signup" }) {
   useEffect(() => {
     if (!loading && user) nav({ to: "/dashboard" });
   }, [loading, user, nav]);
+
+  const tabBase =
+    "flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition";
+  const tabActive = "bg-background text-foreground shadow-sm";
+  const tabInactive = "text-muted-foreground hover:text-foreground";
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
@@ -51,18 +55,24 @@ export function AuthPage({ mode }: { mode: "signin" | "signup" }) {
         </Link>
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-8"><Logo /></div>
-          <Tabs defaultValue={mode}>
-            <TabsList className="grid grid-cols-2 w-full glass">
-              <TabsTrigger value="signin" asChild>
-                <Link to="/login">Sign in</Link>
-              </TabsTrigger>
-              <TabsTrigger value="signup" asChild>
-                <Link to="/signup">Create account</Link>
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="signin"><SignInForm /></TabsContent>
-            <TabsContent value="signup"><SignUpForm /></TabsContent>
-          </Tabs>
+
+          {/* Tab switcher */}
+          <div className="grid grid-cols-2 w-full glass rounded-lg p-1">
+            <Link
+              to="/login"
+              className={`${tabBase} ${mode === "signin" ? tabActive : tabInactive}`}
+            >
+              Sign in
+            </Link>
+            <Link
+              to="/signup"
+              className={`${tabBase} ${mode === "signup" ? tabActive : tabInactive}`}
+            >
+              Create account
+            </Link>
+          </div>
+
+          {mode === "signin" ? <SignInForm /> : <SignUpForm />}
         </div>
       </div>
     </div>
