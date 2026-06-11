@@ -31,9 +31,9 @@ function Landing() {
             <a href="#recruiters" className="hover:text-foreground">For recruiters</a>
           </nav>
           <div className="flex items-center gap-2">
-            <Button asChild variant="ghost" size="sm"><Link to="/auth">Sign in</Link></Button>
+          <Button asChild variant="ghost" size="sm"><Link to="/login">Sign in</Link></Button>
             <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
-              <Link to="/auth">Get started</Link>
+              <Link to="/signup">Get started</Link>
             </Button>
           </div>
         </div>
@@ -58,7 +58,7 @@ function Landing() {
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button asChild size="lg" className="bg-gradient-to-r from-primary to-accent text-primary-foreground glow gap-2 h-12 px-7">
-              <Link to="/auth">
+              <Link to="/signup">
                 Mint your passport <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -162,7 +162,7 @@ function Landing() {
               Verify any candidate's certificate in one click. Scan a QR. Download a signed report.
             </p>
             <Button asChild size="lg" className="mt-8 bg-gradient-to-r from-primary to-accent text-primary-foreground gap-2">
-              <Link to="/auth">Start verifying <ArrowRight className="h-4 w-4" /></Link>
+              <Link to="/recruiter">Start verifying <ArrowRight className="h-4 w-4" /></Link>
             </Button>
           </div>
         </div>

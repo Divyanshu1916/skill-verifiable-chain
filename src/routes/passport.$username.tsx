@@ -47,7 +47,7 @@ function Passport() {
       <header className="sticky top-0 z-30 glass border-b border-border/40">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <Logo />
-          <Button asChild size="sm" variant="outline"><Link to="/auth">Build yours</Link></Button>
+          <Button asChild size="sm" variant="outline"><Link to="/signup">Build yours</Link></Button>
         </div>
       </header>
 
