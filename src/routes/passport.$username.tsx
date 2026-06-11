@@ -34,7 +34,11 @@ export const Route = createFileRoute("/passport/$username")({
 });
 
 function Passport() {
-  const { profile, skills, credentials } = Route.useLoaderData();
+  const { profile, skills, credentials } = Route.useLoaderData() as {
+    profile: { id: string; full_name: string | null; username: string | null; headline: string | null; location: string | null; wallet_address: string | null };
+    skills: { id: string; name: string; level: number }[];
+    credentials: { id: string; title: string; issuer: string; minted: boolean; verified: boolean; tx_hash: string | null }[];
+  };
   const minted = credentials.filter((c) => c.minted).length;
   const score = Math.min(100, minted * 15 + credentials.filter((c) => c.verified).length * 10 + skills.length * 4);
 
