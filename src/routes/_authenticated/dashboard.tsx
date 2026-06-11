@@ -17,7 +17,7 @@ function Dashboard() {
   const [skills, setSkills] = useState(0);
   const [creds, setCreds] = useState<{ total: number; minted: number; verified: number }>({ total: 0, minted: 0, verified: 0 });
   const [profile, setProfile] = useState<{ full_name: string | null; username: string | null; reputation_score: number } | null>(null);
-  const [recent, setRecent] = useState<{ id: string; title: string; issuer: string; tx_hash: string | null; minted: boolean }[]>([]);
+  const [recent, setRecent] = useState<{ id: string; title: string; issuer: string; tx_hash: string | null; minted: boolean; verified: boolean }[]>([]);
 
   useEffect(() => {
     if (!user) return;
