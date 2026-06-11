@@ -9,38 +9,164 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VerifyCredentialIdRouteImport } from './routes/verify.$credentialId'
+import { Route as PassportUsernameRouteImport } from './routes/passport.$username'
+import { Route as AuthenticatedVerifyRouteImport } from './routes/_authenticated/verify'
+import { Route as AuthenticatedSkillsRouteImport } from './routes/_authenticated/skills'
+import { Route as AuthenticatedRecruiterRouteImport } from './routes/_authenticated/recruiter'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authenticated/certificates'
 
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VerifyCredentialIdRoute = VerifyCredentialIdRouteImport.update({
+  id: '/verify/$credentialId',
+  path: '/verify/$credentialId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PassportUsernameRoute = PassportUsernameRouteImport.update({
+  id: '/passport/$username',
+  path: '/passport/$username',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedVerifyRoute = AuthenticatedVerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSkillsRoute = AuthenticatedSkillsRouteImport.update({
+  id: '/skills',
+  path: '/skills',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRecruiterRoute = AuthenticatedRecruiterRouteImport.update({
+  id: '/recruiter',
+  path: '/recruiter',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCertificatesRoute =
+  AuthenticatedCertificatesRouteImport.update({
+    id: '/certificates',
+    path: '/certificates',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/certificates': typeof AuthenticatedCertificatesRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/recruiter': typeof AuthenticatedRecruiterRoute
+  '/skills': typeof AuthenticatedSkillsRoute
+  '/verify': typeof AuthenticatedVerifyRoute
+  '/passport/$username': typeof PassportUsernameRoute
+  '/verify/$credentialId': typeof VerifyCredentialIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/certificates': typeof AuthenticatedCertificatesRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/recruiter': typeof AuthenticatedRecruiterRoute
+  '/skills': typeof AuthenticatedSkillsRoute
+  '/verify': typeof AuthenticatedVerifyRoute
+  '/passport/$username': typeof PassportUsernameRoute
+  '/verify/$credentialId': typeof VerifyCredentialIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/certificates': typeof AuthenticatedCertificatesRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/recruiter': typeof AuthenticatedRecruiterRoute
+  '/_authenticated/skills': typeof AuthenticatedSkillsRoute
+  '/_authenticated/verify': typeof AuthenticatedVerifyRoute
+  '/passport/$username': typeof PassportUsernameRoute
+  '/verify/$credentialId': typeof VerifyCredentialIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/certificates'
+    | '/dashboard'
+    | '/recruiter'
+    | '/skills'
+    | '/verify'
+    | '/passport/$username'
+    | '/verify/$credentialId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/certificates'
+    | '/dashboard'
+    | '/recruiter'
+    | '/skills'
+    | '/verify'
+    | '/passport/$username'
+    | '/verify/$credentialId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/certificates'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/recruiter'
+    | '/_authenticated/skills'
+    | '/_authenticated/verify'
+    | '/passport/$username'
+    | '/verify/$credentialId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  PassportUsernameRoute: typeof PassportUsernameRoute
+  VerifyCredentialIdRoute: typeof VerifyCredentialIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +174,84 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/verify/$credentialId': {
+      id: '/verify/$credentialId'
+      path: '/verify/$credentialId'
+      fullPath: '/verify/$credentialId'
+      preLoaderRoute: typeof VerifyCredentialIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/passport/$username': {
+      id: '/passport/$username'
+      path: '/passport/$username'
+      fullPath: '/passport/$username'
+      preLoaderRoute: typeof PassportUsernameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/verify': {
+      id: '/_authenticated/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof AuthenticatedVerifyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/skills': {
+      id: '/_authenticated/skills'
+      path: '/skills'
+      fullPath: '/skills'
+      preLoaderRoute: typeof AuthenticatedSkillsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/recruiter': {
+      id: '/_authenticated/recruiter'
+      path: '/recruiter'
+      fullPath: '/recruiter'
+      preLoaderRoute: typeof AuthenticatedRecruiterRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/certificates': {
+      id: '/_authenticated/certificates'
+      path: '/certificates'
+      fullPath: '/certificates'
+      preLoaderRoute: typeof AuthenticatedCertificatesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCertificatesRoute: typeof AuthenticatedCertificatesRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedRecruiterRoute: typeof AuthenticatedRecruiterRoute
+  AuthenticatedSkillsRoute: typeof AuthenticatedSkillsRoute
+  AuthenticatedVerifyRoute: typeof AuthenticatedVerifyRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCertificatesRoute: AuthenticatedCertificatesRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedRecruiterRoute: AuthenticatedRecruiterRoute,
+  AuthenticatedSkillsRoute: AuthenticatedSkillsRoute,
+  AuthenticatedVerifyRoute: AuthenticatedVerifyRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  PassportUsernameRoute: PassportUsernameRoute,
+  VerifyCredentialIdRoute: VerifyCredentialIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
