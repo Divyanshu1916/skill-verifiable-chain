@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VerifyCredentialIdRouteImport } from './routes/verify.$credentialId'
+import { Route as PassportUsernameRouteImport } from './routes/passport.$username'
 import { Route as AuthenticatedVerifyRouteImport } from './routes/_authenticated/verify'
 import { Route as AuthenticatedSkillsRouteImport } from './routes/_authenticated/skills'
 import { Route as AuthenticatedRecruiterRouteImport } from './routes/_authenticated/recruiter'
@@ -30,6 +32,16 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyCredentialIdRoute = VerifyCredentialIdRouteImport.update({
+  id: '/verify/$credentialId',
+  path: '/verify/$credentialId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PassportUsernameRoute = PassportUsernameRouteImport.update({
+  id: '/passport/$username',
+  path: '/passport/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedVerifyRoute = AuthenticatedVerifyRouteImport.update({
@@ -67,6 +79,8 @@ export interface FileRoutesByFullPath {
   '/recruiter': typeof AuthenticatedRecruiterRoute
   '/skills': typeof AuthenticatedSkillsRoute
   '/verify': typeof AuthenticatedVerifyRoute
+  '/passport/$username': typeof PassportUsernameRoute
+  '/verify/$credentialId': typeof VerifyCredentialIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -76,6 +90,8 @@ export interface FileRoutesByTo {
   '/recruiter': typeof AuthenticatedRecruiterRoute
   '/skills': typeof AuthenticatedSkillsRoute
   '/verify': typeof AuthenticatedVerifyRoute
+  '/passport/$username': typeof PassportUsernameRoute
+  '/verify/$credentialId': typeof VerifyCredentialIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,6 +103,8 @@ export interface FileRoutesById {
   '/_authenticated/recruiter': typeof AuthenticatedRecruiterRoute
   '/_authenticated/skills': typeof AuthenticatedSkillsRoute
   '/_authenticated/verify': typeof AuthenticatedVerifyRoute
+  '/passport/$username': typeof PassportUsernameRoute
+  '/verify/$credentialId': typeof VerifyCredentialIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -98,6 +116,8 @@ export interface FileRouteTypes {
     | '/recruiter'
     | '/skills'
     | '/verify'
+    | '/passport/$username'
+    | '/verify/$credentialId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -107,6 +127,8 @@ export interface FileRouteTypes {
     | '/recruiter'
     | '/skills'
     | '/verify'
+    | '/passport/$username'
+    | '/verify/$credentialId'
   id:
     | '__root__'
     | '/'
@@ -117,12 +139,16 @@ export interface FileRouteTypes {
     | '/_authenticated/recruiter'
     | '/_authenticated/skills'
     | '/_authenticated/verify'
+    | '/passport/$username'
+    | '/verify/$credentialId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  PassportUsernameRoute: typeof PassportUsernameRoute
+  VerifyCredentialIdRoute: typeof VerifyCredentialIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -146,6 +172,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify/$credentialId': {
+      id: '/verify/$credentialId'
+      path: '/verify/$credentialId'
+      fullPath: '/verify/$credentialId'
+      preLoaderRoute: typeof VerifyCredentialIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/passport/$username': {
+      id: '/passport/$username'
+      path: '/passport/$username'
+      fullPath: '/passport/$username'
+      preLoaderRoute: typeof PassportUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/verify': {
@@ -209,7 +249,19 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  PassportUsernameRoute: PassportUsernameRoute,
+  VerifyCredentialIdRoute: VerifyCredentialIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
