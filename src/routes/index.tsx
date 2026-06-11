@@ -1,16 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
+import { GradientOrb } from "@/components/GradientOrb";
 import {
   Shield, Sparkles, Zap, Wallet, BadgeCheck, ArrowRight,
-  FileBadge, Search, QrCode, Hexagon,
+  FileBadge, Search, QrCode, Hexagon, BarChart3, PlayCircle, Star, Globe,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "SkillChain — Own Your Skills. Verify Instantly. Get Hired Faster." },
-      { name: "description", content: "Blockchain-powered skill passport. Upload skills, mint credential NFTs on Polygon, and share a verifiable public profile recruiters trust." },
+      { name: "description", content: "Blockchain-powered skill passport. Mint credential NFTs on Polygon, share a verifiable profile, and let recruiters trust you in one scan." },
       { property: "og:title", content: "SkillChain — Verifiable Skill Passport" },
       { property: "og:description", content: "Mint credential NFTs on Polygon. Prove your skills on-chain." },
     ],
@@ -20,18 +21,23 @@ export const Route = createFileRoute("/")({
 
 function Landing() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      {/* Aurora background */}
+      <GradientOrb className="top-[-200px] left-1/2 -translate-x-1/2 h-[600px] w-[1000px]" />
+      <GradientOrb className="top-[40%] right-[-150px] h-[400px] w-[400px]" />
+
       {/* Nav */}
       <header className="sticky top-0 z-40 glass border-b border-border/40">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
           <Logo />
-          <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-            <a href="#features" className="hover:text-foreground">Features</a>
-            <a href="#how" className="hover:text-foreground">How it works</a>
-            <a href="#recruiters" className="hover:text-foreground">For recruiters</a>
+          <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
+            <a href="#features" className="hover:text-foreground transition">Features</a>
+            <a href="#how" className="hover:text-foreground transition">How it works</a>
+            <a href="#nfts" className="hover:text-foreground transition">NFT Credentials</a>
+            <a href="#recruiters" className="hover:text-foreground transition">Recruiters</a>
           </nav>
-          <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm"><Link to="/login">Sign in</Link></Button>
+          <div className="flex items-center gap-2 shrink-0">
+            <Button asChild variant="ghost" size="sm"><Link to="/login">Sign in</Link></Button>
             <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
               <Link to="/signup">Get started</Link>
             </Button>
@@ -41,78 +47,79 @@ function Landing() {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" />
-        <div className="absolute top-32 left-1/2 -translate-x-1/2 h-[420px] w-[820px] rounded-full bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 blur-3xl pointer-events-none" />
-        <div className="relative max-w-7xl mx-auto px-6 pt-20 md:pt-32 pb-20 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground mb-8">
+        <div className="absolute inset-0 grid-bg pointer-events-none" />
+        <div className="relative max-w-7xl mx-auto px-6 pt-20 md:pt-28 pb-20 text-center">
+          <Link to="/demo" className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground mb-8 hover:text-foreground transition">
             <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
-            Live on Polygon · Web3 credentials, zero gas for users
-          </div>
-          <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]">
+            Live on Polygon · Try the demo dashboard
+            <ArrowRight className="h-3 w-3" />
+          </Link>
+          <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.02] animate-fade-up">
             Own your skills. <br />
             <span className="text-gradient">Verify instantly.</span>
           </h1>
-          <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto animate-fade-up" style={{ animationDelay: "0.1s" }}>
             SkillChain turns your certificates into on-chain credentials. Mint NFT badges,
             share a verifiable passport, and let recruiters trust you in one scan.
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 animate-fade-up" style={{ animationDelay: "0.2s" }}>
             <Button asChild size="lg" className="bg-gradient-to-r from-primary to-accent text-primary-foreground glow gap-2 h-12 px-7">
-              <Link to="/signup">
-                Mint your passport <ArrowRight className="h-4 w-4" />
-              </Link>
+              <Link to="/signup">Get started <ArrowRight className="h-4 w-4" /></Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="h-12 px-7 glass">
-              <Link to="/recruiter">I'm a recruiter</Link>
+            <Button asChild size="lg" variant="outline" className="h-12 px-7 glass gap-2">
+              <Link to="/demo"><PlayCircle className="h-4 w-4" /> View demo</Link>
             </Button>
           </div>
 
-          {/* Floating cred card */}
-          <div className="relative mt-16 mx-auto max-w-3xl">
-            <div className="glass-strong rounded-2xl p-6 md:p-8 text-left animate-float">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-primary to-accent grid place-items-center">
-                    <Hexagon className="h-6 w-6 text-primary-foreground" />
+          {/* Floating credential NFT */}
+          <div className="relative mt-20 mx-auto max-w-3xl animate-fade-up" style={{ animationDelay: "0.3s" }}>
+            <div className="absolute -inset-8 aurora rounded-3xl" />
+            <Link to="/nft" className="relative block">
+              <div className="glass-strong rounded-2xl p-6 md:p-8 text-left animate-float hover:border-primary/40 transition">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-primary to-accent grid place-items-center shrink-0 glow">
+                      <Hexagon className="h-6 w-6 text-primary-foreground" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-xs text-muted-foreground uppercase tracking-wider">Credential NFT</div>
+                      <div className="font-display text-lg font-semibold truncate">Advanced React Developer</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-xs text-muted-foreground uppercase tracking-wider">Credential NFT</div>
-                    <div className="font-display text-lg font-semibold">Advanced React Developer</div>
-                  </div>
+                  <span className="text-xs px-2 py-1 rounded-md bg-success/10 text-success border border-success/30 inline-flex items-center gap-1 shrink-0">
+                    <BadgeCheck className="h-3 w-3" /> Verified
+                  </span>
                 </div>
-                <span className="text-xs px-2 py-1 rounded-md bg-success/10 text-success border border-success/30 inline-flex items-center gap-1">
-                  <BadgeCheck className="h-3 w-3" /> Verified
-                </span>
+                <div className="mt-5 grid grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+                  <Field label="Issuer" value="Meta" />
+                  <Field label="Chain" value="Polygon" />
+                  <Field label="Token ID" value="#0x4a8…f29" mono />
+                  <Field label="Tx Hash" value="0x9b1c…e0a2" mono />
+                  <Field label="Issued" value="Jun 11, 2026" />
+                  <Field label="Holder" value="0x82…9cD1" mono />
+                </div>
               </div>
-              <div className="mt-5 grid grid-cols-2 md:grid-cols-3 gap-4 text-xs">
-                <Field label="Issuer" value="Meta" />
-                <Field label="Chain" value="Polygon" />
-                <Field label="Token ID" value="#0x4a8…f29" mono />
-                <Field label="Tx Hash" value="0x9b1c…e0a2" mono />
-                <Field label="Issued" value="Jun 11, 2026" />
-                <Field label="Holder" value="0x82…9cD1" mono />
-              </div>
-            </div>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Stats */}
+      {/* Stats — clickable */}
       <section className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { k: "12,847", v: "Credentials minted" },
-          { k: "3,210", v: "Active students" },
-          { k: "486", v: "Recruiters onboard" },
-          { k: "100%", v: "On-chain verified" },
+          { k: "12,847", v: "Credentials minted", to: "/analytics" },
+          { k: "3,210", v: "Active students", to: "/analytics" },
+          { k: "486", v: "Recruiters onboard", to: "/recruiter" },
+          { k: "100%", v: "On-chain verified", to: "/nft" },
         ].map((s) => (
-          <div key={s.v} className="glass rounded-xl p-5 text-center">
+          <Link to={s.to} key={s.v} className="glass rounded-xl p-5 text-center hover:border-primary/40 hover:-translate-y-0.5 transition group">
             <div className="font-display text-2xl md:text-3xl font-bold text-gradient">{s.k}</div>
-            <div className="text-xs text-muted-foreground mt-1">{s.v}</div>
-          </div>
+            <div className="text-xs text-muted-foreground mt-1 group-hover:text-foreground">{s.v} →</div>
+          </Link>
         ))}
       </section>
 
-      {/* Features */}
+      {/* Features bento */}
       <section id="features" className="max-w-7xl mx-auto px-6 py-20">
         <div className="text-center mb-14">
           <div className="text-xs uppercase tracking-[0.2em] text-primary mb-3">Features</div>
@@ -120,13 +127,41 @@ function Landing() {
         </div>
         <div className="grid md:grid-cols-3 gap-5">
           {features.map((f) => (
-            <div key={f.title} className="glass rounded-2xl p-6 group hover:border-primary/40 transition-all">
+            <Link to={f.to} key={f.title} className="glass rounded-2xl p-6 group hover:border-primary/40 transition-all hover:-translate-y-1">
               <div className="h-11 w-11 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 grid place-items-center mb-4 group-hover:animate-pulse-glow">
                 <f.icon className="h-5 w-5 text-primary" />
               </div>
               <h3 className="font-display font-semibold text-lg">{f.title}</h3>
               <p className="text-sm text-muted-foreground mt-2">{f.desc}</p>
-            </div>
+              <div className="mt-4 text-xs text-primary inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+                Open <ArrowRight className="h-3 w-3" />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* NFT gallery preview */}
+      <section id="nfts" className="max-w-7xl mx-auto px-6 py-20">
+        <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+          <div>
+            <div className="text-xs uppercase tracking-[0.2em] text-accent mb-3">NFT Credentials</div>
+            <h2 className="font-display text-3xl md:text-5xl font-bold">Own them. Show them. Prove them.</h2>
+          </div>
+          <Button asChild variant="outline" className="glass gap-2"><Link to="/nft">Explore gallery <ArrowRight className="h-4 w-4" /></Link></Button>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {sampleNFTs.map((n, i) => (
+            <Link to="/nft" key={n.title} className="group">
+              <div className="glass-strong rounded-2xl p-4 hover:border-primary/40 hover:-translate-y-1 transition">
+                <div className="relative aspect-square rounded-xl overflow-hidden mb-3" style={{ background: `linear-gradient(135deg, oklch(0.55 0.2 ${195 + i * 30}), oklch(0.5 0.22 ${305 + i * 20}))` }}>
+                  <div className="absolute inset-0 grid-bg opacity-40" />
+                  <Hexagon className="absolute inset-0 m-auto h-16 w-16 text-white/90 animate-float" strokeWidth={1.2} />
+                </div>
+                <div className="font-semibold text-sm truncate">{n.title}</div>
+                <div className="text-xs text-muted-foreground truncate">{n.issuer}</div>
+              </div>
+            </Link>
           ))}
         </div>
       </section>
@@ -153,6 +188,7 @@ function Landing() {
       <section id="recruiters" className="max-w-7xl mx-auto px-6 py-20">
         <div className="glass-strong rounded-3xl p-10 md:p-16 text-center relative overflow-hidden">
           <div className="absolute inset-0 grid-bg opacity-30" />
+          <GradientOrb className="-top-32 -right-32 h-96 w-96" />
           <div className="relative">
             <Search className="h-10 w-10 text-primary mx-auto mb-4" />
             <h2 className="font-display text-3xl md:text-5xl font-bold max-w-2xl mx-auto">
@@ -161,10 +197,25 @@ function Landing() {
             <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
               Verify any candidate's certificate in one click. Scan a QR. Download a signed report.
             </p>
-            <Button asChild size="lg" className="mt-8 bg-gradient-to-r from-primary to-accent text-primary-foreground gap-2">
-              <Link to="/recruiter">Start verifying <ArrowRight className="h-4 w-4" /></Link>
-            </Button>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Button asChild size="lg" className="bg-gradient-to-r from-primary to-accent text-primary-foreground gap-2">
+                <Link to="/recruiter">Open recruiter dashboard <ArrowRight className="h-4 w-4" /></Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="glass gap-2">
+                <Link to="/qr"><QrCode className="h-4 w-4" /> Try QR verification</Link>
+              </Button>
+            </div>
           </div>
+        </div>
+      </section>
+
+      {/* Testimonial / trust strip */}
+      <section className="max-w-7xl mx-auto px-6 py-10">
+        <div className="glass rounded-2xl p-6 flex flex-wrap items-center justify-around gap-6 text-xs text-muted-foreground uppercase tracking-wider">
+          <span className="flex items-center gap-2"><Star className="h-4 w-4 text-primary" /> Polygon Native</span>
+          <span className="flex items-center gap-2"><Shield className="h-4 w-4 text-primary" /> Zero-Knowledge Ready</span>
+          <span className="flex items-center gap-2"><Globe className="h-4 w-4 text-primary" /> Public Verification</span>
+          <span className="flex items-center gap-2"><BarChart3 className="h-4 w-4 text-primary" /> Reputation Engine</span>
         </div>
       </section>
 
@@ -188,16 +239,23 @@ function Field({ label, value, mono }: { label: string; value: string; mono?: bo
 }
 
 const features = [
-  { icon: Sparkles, title: "Skill management", desc: "Add, level, and categorize your skills with endorsement scores." },
-  { icon: FileBadge, title: "Certificate upload", desc: "Drop any PDF or image. We hash it client-side and anchor it on-chain." },
-  { icon: Hexagon, title: "NFT credentials", desc: "Mint each verified credential as an NFT on Polygon — own it forever." },
-  { icon: Wallet, title: "MetaMask wallet", desc: "Connect your wallet to claim ownership of your skill passport." },
-  { icon: QrCode, title: "QR verification", desc: "Share a single QR. Recruiters verify instantly, no logins." },
-  { icon: Shield, title: "Reputation score", desc: "A composite signal recruiters trust — minted, verified, endorsed." },
+  { icon: Sparkles, title: "Skill management", desc: "Add, level, and categorize your skills with endorsement scores.", to: "/skills" as const },
+  { icon: FileBadge, title: "Certificate upload", desc: "Drop any PDF or image. We hash it client-side and anchor it on-chain.", to: "/certificates" as const },
+  { icon: Hexagon, title: "NFT credentials", desc: "Mint each verified credential as an NFT on Polygon — own it forever.", to: "/nft" as const },
+  { icon: Wallet, title: "MetaMask wallet", desc: "Connect your wallet to claim ownership of your skill passport.", to: "/wallet" as const },
+  { icon: QrCode, title: "QR verification", desc: "Share a single QR. Recruiters verify instantly, no logins.", to: "/qr" as const },
+  { icon: BarChart3, title: "Reputation score", desc: "A composite signal recruiters trust — minted, verified, endorsed.", to: "/reputation" as const },
 ];
 
 const steps = [
   { icon: Zap, title: "Sign up & connect", desc: "Create your passport, connect MetaMask in 30 seconds." },
   { icon: FileBadge, title: "Upload credentials", desc: "Add skills and certificates. We hash & anchor each one." },
   { icon: BadgeCheck, title: "Mint & share", desc: "Mint NFT badges and share a public, verifiable link." },
+];
+
+const sampleNFTs = [
+  { title: "Advanced React", issuer: "Meta" },
+  { title: "Solidity Pro", issuer: "Alchemy" },
+  { title: "AWS Architect", issuer: "Amazon" },
+  { title: "Figma Master", issuer: "Figma" },
 ];

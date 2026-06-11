@@ -1,6 +1,6 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { type ReactNode } from "react";
-import { LayoutDashboard, Sparkles, FileBadge, ShieldCheck, Search, LogOut, User as UserIcon } from "lucide-react";
+import { LayoutDashboard, Sparkles, FileBadge, ShieldCheck, Search, LogOut, User as UserIcon, Hexagon, BarChart3, Wallet, QrCode, TrendingUp } from "lucide-react";
 import { Logo } from "./Logo";
 import { WalletButton } from "./WalletButton";
 import { useAuth } from "@/lib/auth-context";
@@ -10,11 +10,17 @@ const studentNav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/skills", label: "Skills", icon: Sparkles },
   { to: "/certificates", label: "Certificates", icon: FileBadge },
+  { to: "/nft", label: "NFTs", icon: Hexagon },
+  { to: "/reputation", label: "Reputation", icon: TrendingUp },
+  { to: "/analytics", label: "Analytics", icon: BarChart3 },
+  { to: "/wallet", label: "Wallet", icon: Wallet },
+  { to: "/qr", label: "QR Verify", icon: QrCode },
   { to: "/verify", label: "Verify", icon: ShieldCheck },
 ];
 const recruiterNav = [
   { to: "/recruiter", label: "Search", icon: Search },
   { to: "/verify", label: "Verify", icon: ShieldCheck },
+  { to: "/qr", label: "QR Verify", icon: QrCode },
 ];
 
 export function AppShell({ children, title }: { children: ReactNode; title?: string }) {

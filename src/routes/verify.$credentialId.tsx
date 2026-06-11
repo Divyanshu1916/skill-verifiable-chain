@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/verify/$credentialId")({
   head: () => ({ meta: [{ title: "Credential verification — SkillChain" }] }),
   loader: async ({ params }) => {
-    const { data } = await supabase
+    const isUuid = /^[0-9a-f]{8}-/.test(params.credentialId);
+    const q = supabase
       .from("credentials")
-      .select("*, profiles!credentials_user_id_fkey(full_name, username, wallet_address)")
-      .eq("id", params.credentialId)
-      .maybeSingle();
+      .select("*, profiles!credentials_user_id_fkey(full_name, username, wallet_address)");
+    const { data } = await (isUuid
+      ? q.eq("id", params.credentialId).maybeSingle()
+      : q.eq("credential_id", params.credentialId).maybeSingle());
     if (!data) throw notFound();
     return { credential: data };
   },
