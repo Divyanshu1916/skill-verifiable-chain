@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           chain: string | null
           created_at: string
+          credential_id: string | null
           description: string | null
           file_hash: string | null
           file_url: string | null
@@ -25,6 +26,7 @@ export type Database = {
           issued_at: string | null
           issuer: string
           minted: boolean
+          nft_id: string | null
           nft_token_id: string | null
           title: string
           tx_hash: string | null
@@ -34,6 +36,7 @@ export type Database = {
         Insert: {
           chain?: string | null
           created_at?: string
+          credential_id?: string | null
           description?: string | null
           file_hash?: string | null
           file_url?: string | null
@@ -41,6 +44,7 @@ export type Database = {
           issued_at?: string | null
           issuer: string
           minted?: boolean
+          nft_id?: string | null
           nft_token_id?: string | null
           title: string
           tx_hash?: string | null
@@ -50,6 +54,7 @@ export type Database = {
         Update: {
           chain?: string | null
           created_at?: string
+          credential_id?: string | null
           description?: string | null
           file_hash?: string | null
           file_url?: string | null
@@ -57,6 +62,7 @@ export type Database = {
           issued_at?: string | null
           issuer?: string
           minted?: boolean
+          nft_id?: string | null
           nft_token_id?: string | null
           title?: string
           tx_hash?: string | null
