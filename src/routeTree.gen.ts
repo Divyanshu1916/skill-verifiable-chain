@@ -11,16 +11,23 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as DemoRouteImport } from './routes/demo'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VerifyCredentialIdRouteImport } from './routes/verify.$credentialId'
 import { Route as PassportUsernameRouteImport } from './routes/passport.$username'
+import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
 import { Route as AuthenticatedVerifyRouteImport } from './routes/_authenticated/verify'
 import { Route as AuthenticatedSkillsRouteImport } from './routes/_authenticated/skills'
+import { Route as AuthenticatedReputationRouteImport } from './routes/_authenticated/reputation'
 import { Route as AuthenticatedRecruiterRouteImport } from './routes/_authenticated/recruiter'
+import { Route as AuthenticatedQrRouteImport } from './routes/_authenticated/qr'
+import { Route as AuthenticatedNftRouteImport } from './routes/_authenticated/nft'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authenticated/certificates'
+import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
+import { Route as AuthenticatedNftIdRouteImport } from './routes/_authenticated/nft.$id'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -30,6 +37,11 @@ const SignupRoute = SignupRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoRoute = DemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -56,6 +68,11 @@ const PassportUsernameRoute = PassportUsernameRouteImport.update({
   path: '/passport/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedVerifyRoute = AuthenticatedVerifyRouteImport.update({
   id: '/verify',
   path: '/verify',
@@ -66,9 +83,24 @@ const AuthenticatedSkillsRoute = AuthenticatedSkillsRouteImport.update({
   path: '/skills',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedReputationRoute = AuthenticatedReputationRouteImport.update({
+  id: '/reputation',
+  path: '/reputation',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRecruiterRoute = AuthenticatedRecruiterRouteImport.update({
   id: '/recruiter',
   path: '/recruiter',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedQrRoute = AuthenticatedQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedNftRoute = AuthenticatedNftRouteImport.update({
+  id: '/nft',
+  path: '/nft',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -82,95 +114,148 @@ const AuthenticatedCertificatesRoute =
     path: '/certificates',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedNftIdRoute = AuthenticatedNftIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedNftRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/nft': typeof AuthenticatedNftRouteWithChildren
+  '/qr': typeof AuthenticatedQrRoute
   '/recruiter': typeof AuthenticatedRecruiterRoute
+  '/reputation': typeof AuthenticatedReputationRoute
   '/skills': typeof AuthenticatedSkillsRoute
   '/verify': typeof AuthenticatedVerifyRoute
+  '/wallet': typeof AuthenticatedWalletRoute
   '/passport/$username': typeof PassportUsernameRoute
   '/verify/$credentialId': typeof VerifyCredentialIdRoute
+  '/nft/$id': typeof AuthenticatedNftIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/nft': typeof AuthenticatedNftRouteWithChildren
+  '/qr': typeof AuthenticatedQrRoute
   '/recruiter': typeof AuthenticatedRecruiterRoute
+  '/reputation': typeof AuthenticatedReputationRoute
   '/skills': typeof AuthenticatedSkillsRoute
   '/verify': typeof AuthenticatedVerifyRoute
+  '/wallet': typeof AuthenticatedWalletRoute
   '/passport/$username': typeof PassportUsernameRoute
   '/verify/$credentialId': typeof VerifyCredentialIdRoute
+  '/nft/$id': typeof AuthenticatedNftIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/certificates': typeof AuthenticatedCertificatesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/nft': typeof AuthenticatedNftRouteWithChildren
+  '/_authenticated/qr': typeof AuthenticatedQrRoute
   '/_authenticated/recruiter': typeof AuthenticatedRecruiterRoute
+  '/_authenticated/reputation': typeof AuthenticatedReputationRoute
   '/_authenticated/skills': typeof AuthenticatedSkillsRoute
   '/_authenticated/verify': typeof AuthenticatedVerifyRoute
+  '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/passport/$username': typeof PassportUsernameRoute
   '/verify/$credentialId': typeof VerifyCredentialIdRoute
+  '/_authenticated/nft/$id': typeof AuthenticatedNftIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
+    | '/demo'
     | '/login'
     | '/signup'
+    | '/analytics'
     | '/certificates'
     | '/dashboard'
+    | '/nft'
+    | '/qr'
     | '/recruiter'
+    | '/reputation'
     | '/skills'
     | '/verify'
+    | '/wallet'
     | '/passport/$username'
     | '/verify/$credentialId'
+    | '/nft/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/demo'
     | '/login'
     | '/signup'
+    | '/analytics'
     | '/certificates'
     | '/dashboard'
+    | '/nft'
+    | '/qr'
     | '/recruiter'
+    | '/reputation'
     | '/skills'
     | '/verify'
+    | '/wallet'
     | '/passport/$username'
     | '/verify/$credentialId'
+    | '/nft/$id'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/demo'
     | '/login'
     | '/signup'
+    | '/_authenticated/analytics'
     | '/_authenticated/certificates'
     | '/_authenticated/dashboard'
+    | '/_authenticated/nft'
+    | '/_authenticated/qr'
     | '/_authenticated/recruiter'
+    | '/_authenticated/reputation'
     | '/_authenticated/skills'
     | '/_authenticated/verify'
+    | '/_authenticated/wallet'
     | '/passport/$username'
     | '/verify/$credentialId'
+    | '/_authenticated/nft/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  DemoRoute: typeof DemoRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
   PassportUsernameRoute: typeof PassportUsernameRoute
@@ -191,6 +276,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo': {
+      id: '/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -228,6 +320,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PassportUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/wallet': {
+      id: '/_authenticated/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof AuthenticatedWalletRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/verify': {
       id: '/_authenticated/verify'
       path: '/verify'
@@ -242,11 +341,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSkillsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reputation': {
+      id: '/_authenticated/reputation'
+      path: '/reputation'
+      fullPath: '/reputation'
+      preLoaderRoute: typeof AuthenticatedReputationRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/recruiter': {
       id: '/_authenticated/recruiter'
       path: '/recruiter'
       fullPath: '/recruiter'
       preLoaderRoute: typeof AuthenticatedRecruiterRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/qr': {
+      id: '/_authenticated/qr'
+      path: '/qr'
+      fullPath: '/qr'
+      preLoaderRoute: typeof AuthenticatedQrRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/nft': {
+      id: '/_authenticated/nft'
+      path: '/nft'
+      fullPath: '/nft'
+      preLoaderRoute: typeof AuthenticatedNftRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -263,23 +383,58 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCertificatesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/analytics': {
+      id: '/_authenticated/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AuthenticatedAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/nft/$id': {
+      id: '/_authenticated/nft/$id'
+      path: '/$id'
+      fullPath: '/nft/$id'
+      preLoaderRoute: typeof AuthenticatedNftIdRouteImport
+      parentRoute: typeof AuthenticatedNftRoute
+    }
   }
 }
 
+interface AuthenticatedNftRouteChildren {
+  AuthenticatedNftIdRoute: typeof AuthenticatedNftIdRoute
+}
+
+const AuthenticatedNftRouteChildren: AuthenticatedNftRouteChildren = {
+  AuthenticatedNftIdRoute: AuthenticatedNftIdRoute,
+}
+
+const AuthenticatedNftRouteWithChildren =
+  AuthenticatedNftRoute._addFileChildren(AuthenticatedNftRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedCertificatesRoute: typeof AuthenticatedCertificatesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedNftRoute: typeof AuthenticatedNftRouteWithChildren
+  AuthenticatedQrRoute: typeof AuthenticatedQrRoute
   AuthenticatedRecruiterRoute: typeof AuthenticatedRecruiterRoute
+  AuthenticatedReputationRoute: typeof AuthenticatedReputationRoute
   AuthenticatedSkillsRoute: typeof AuthenticatedSkillsRoute
   AuthenticatedVerifyRoute: typeof AuthenticatedVerifyRoute
+  AuthenticatedWalletRoute: typeof AuthenticatedWalletRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedCertificatesRoute: AuthenticatedCertificatesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedNftRoute: AuthenticatedNftRouteWithChildren,
+  AuthenticatedQrRoute: AuthenticatedQrRoute,
   AuthenticatedRecruiterRoute: AuthenticatedRecruiterRoute,
+  AuthenticatedReputationRoute: AuthenticatedReputationRoute,
   AuthenticatedSkillsRoute: AuthenticatedSkillsRoute,
   AuthenticatedVerifyRoute: AuthenticatedVerifyRoute,
+  AuthenticatedWalletRoute: AuthenticatedWalletRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -289,6 +444,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  DemoRoute: DemoRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
   PassportUsernameRoute: PassportUsernameRoute,
