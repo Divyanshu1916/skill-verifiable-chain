@@ -7,7 +7,7 @@ import { explorerUrl, shortAddress } from "@/lib/web3";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/passport/$username")({
-  head: ({ loaderData }) => ({
+  head: ({ loaderData }: { loaderData?: { profile: { full_name: string | null; username: string | null; headline: string | null } } }) => ({
     meta: [
       { title: `${loaderData?.profile.full_name ?? loaderData?.profile.username ?? "Skill Passport"} — SkillChain` },
       { name: "description", content: loaderData?.profile.headline ?? "Verifiable skill passport on Polygon." },
