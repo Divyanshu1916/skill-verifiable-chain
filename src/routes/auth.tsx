@@ -46,7 +46,14 @@ function AuthPage() {
       </div>
 
       {/* Form */}
-      <div className="flex items-center justify-center p-6 md:p-12">
+      <div className="flex items-center justify-center p-6 md:p-12 relative">
+        <Link
+          to="/"
+          aria-label="Back to home"
+          className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full glass px-3 py-2 text-xs text-muted-foreground hover:text-foreground transition"
+        >
+          <ArrowLeft className="h-4 w-4" /> Back
+        </Link>
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-8"><Logo /></div>
           <Tabs defaultValue="signin">
