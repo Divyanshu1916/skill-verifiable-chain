@@ -35,6 +35,7 @@ function Landing() {
             <a href="#how" className="hover:text-foreground transition">How it works</a>
             <a href="#nfts" className="hover:text-foreground transition">NFT Credentials</a>
             <a href="#recruiters" className="hover:text-foreground transition">Recruiters</a>
+            <Link to="/feedback" className="hover:text-foreground transition">Feedback</Link>
           </nav>
           <div className="flex items-center gap-2 shrink-0">
             <Button asChild variant="ghost" size="sm"><Link to="/login">Sign in</Link></Button>
