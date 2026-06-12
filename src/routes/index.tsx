@@ -48,78 +48,83 @@ function Landing() {
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 grid-bg pointer-events-none" />
-        <div className="relative max-w-7xl mx-auto px-6 pt-20 md:pt-28 pb-20 text-center">
-          <Link to="/demo" className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground mb-8 hover:text-foreground transition">
-            <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
-            Live on Polygon · Try the demo dashboard
-            <ArrowRight className="h-3 w-3" />
-          </Link>
-          <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.02] animate-fade-up">
-            Own your skills. <br />
-            <span className="text-gradient">Verify instantly.</span>
-          </h1>
-          <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto animate-fade-up" style={{ animationDelay: "0.1s" }}>
-            SkillChain turns your certificates into on-chain credentials. Mint NFT badges,
-            share a verifiable passport, and let recruiters trust you in one scan.
-          </p>
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 animate-fade-up" style={{ animationDelay: "0.2s" }}>
-            <Button asChild size="lg" className="bg-gradient-to-r from-primary to-accent text-primary-foreground glow gap-2 h-12 px-7">
-              <Link to="/signup">Get started <ArrowRight className="h-4 w-4" /></Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="h-12 px-7 glass gap-2">
-              <Link to="/demo"><PlayCircle className="h-4 w-4" /> View demo</Link>
-            </Button>
-          </div>
+      <section className="relative px-3 sm:px-6 pt-6 md:pt-10">
+        <div className="relative max-w-7xl mx-auto rounded-[28px] border border-white/10 shadow-[0_30px_120px_-30px_oklch(0.5_0.22_295_/_0.55)] overflow-hidden">
+          <HeroBackground />
 
-          {/* Floating credential NFT */}
-          <div className="relative mt-20 mx-auto max-w-3xl animate-fade-up" style={{ animationDelay: "0.3s" }}>
-            <div className="absolute -inset-8 aurora rounded-3xl" />
-            <Link to="/nft" className="relative block">
-              <div className="glass-strong rounded-2xl p-6 md:p-8 text-left animate-float hover:border-primary/40 transition">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-primary to-accent grid place-items-center shrink-0 glow">
-                      <Hexagon className="h-6 w-6 text-primary-foreground" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-xs text-muted-foreground uppercase tracking-wider">Credential NFT</div>
-                      <div className="font-display text-lg font-semibold truncate">Advanced React Developer</div>
-                    </div>
-                  </div>
-                  <span className="text-xs px-2 py-1 rounded-md bg-success/10 text-success border border-success/30 inline-flex items-center gap-1 shrink-0">
-                    <BadgeCheck className="h-3 w-3" /> Verified
-                  </span>
-                </div>
-                <div className="mt-5 grid grid-cols-2 md:grid-cols-3 gap-4 text-xs">
-                  <Field label="Issuer" value="Meta" />
-                  <Field label="Chain" value="Polygon" />
-                  <Field label="Token ID" value="#0x4a8…f29" mono />
-                  <Field label="Tx Hash" value="0x9b1c…e0a2" mono />
-                  <Field label="Issued" value="Jun 11, 2026" />
-                  <Field label="Holder" value="0x82…9cD1" mono />
-                </div>
-              </div>
+          {/* Content */}
+          <div className="relative px-5 sm:px-8 md:px-12 pt-16 md:pt-24 pb-12 md:pb-16 text-center">
+            <Link to="/demo" className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-white/80 mb-8 hover:text-white transition">
+              <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
+              Live on Polygon · Try the demo dashboard
+              <ArrowRight className="h-3 w-3" />
             </Link>
+            <h1 className="font-display text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight leading-[1.02] text-white animate-fade-up">
+              Own your skills. <br />
+              <span className="text-gradient">Verify instantly.</span>
+            </h1>
+            <p className="mt-6 text-base sm:text-lg md:text-xl text-white/75 max-w-2xl mx-auto animate-fade-up" style={{ animationDelay: "0.1s" }}>
+              SkillChain turns your certificates into on-chain credentials. Mint NFT badges,
+              share a verifiable passport, and let recruiters trust you in one scan.
+            </p>
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 animate-fade-up" style={{ animationDelay: "0.2s" }}>
+              <Button asChild size="lg" className="bg-gradient-to-r from-primary to-accent text-primary-foreground glow gap-2 h-12 px-7">
+                <Link to="/signup">Get started <ArrowRight className="h-4 w-4" /></Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="h-12 px-7 glass gap-2 text-white border-white/20 hover:text-white">
+                <Link to="/demo"><PlayCircle className="h-4 w-4" /> View demo</Link>
+              </Button>
+            </div>
+
+            {/* Floating credential NFT */}
+            <div className="relative mt-16 mx-auto max-w-3xl animate-fade-up" style={{ animationDelay: "0.3s" }}>
+              <Link to="/nft" className="relative block">
+                <div className="glass-strong rounded-2xl p-6 md:p-8 text-left animate-float hover:border-primary/40 transition">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-primary to-accent grid place-items-center shrink-0 glow">
+                        <Hexagon className="h-6 w-6 text-primary-foreground" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs text-white/70 uppercase tracking-wider">Credential NFT</div>
+                        <div className="font-display text-lg font-semibold truncate text-white">Advanced React Developer</div>
+                      </div>
+                    </div>
+                    <span className="text-xs px-2 py-1 rounded-md bg-success/10 text-success border border-success/30 inline-flex items-center gap-1 shrink-0">
+                      <BadgeCheck className="h-3 w-3" /> Verified
+                    </span>
+                  </div>
+                  <div className="mt-5 grid grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+                    <Field label="Issuer" value="Meta" />
+                    <Field label="Chain" value="Polygon" />
+                    <Field label="Token ID" value="#0x4a8…f29" mono />
+                    <Field label="Tx Hash" value="0x9b1c…e0a2" mono />
+                    <Field label="Issued" value="Jun 11, 2026" />
+                    <Field label="Holder" value="0x82…9cD1" mono />
+                  </div>
+                </div>
+              </Link>
+            </div>
+
+            {/* Stats inside hero */}
+            <div className="relative mt-10 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+              {[
+                { k: "12,847", v: "Credentials minted", to: "/analytics" as const },
+                { k: "3,210", v: "Active students", to: "/analytics" as const },
+                { k: "486", v: "Recruiters onboard", to: "/recruiter" as const },
+                { k: "100%", v: "On-chain verified", to: "/nft" as const },
+              ].map((s) => (
+                <Link to={s.to} key={s.v} className="glass rounded-xl p-4 sm:p-5 text-center hover:border-primary/40 hover:-translate-y-0.5 transition group">
+                  <div className="font-display text-2xl md:text-3xl font-bold text-gradient">{s.k}</div>
+                  <div className="text-[11px] sm:text-xs text-white/70 mt-1 group-hover:text-white">{s.v} →</div>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Stats — clickable */}
-      <section className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { k: "12,847", v: "Credentials minted", to: "/analytics" },
-          { k: "3,210", v: "Active students", to: "/analytics" },
-          { k: "486", v: "Recruiters onboard", to: "/recruiter" },
-          { k: "100%", v: "On-chain verified", to: "/nft" },
-        ].map((s) => (
-          <Link to={s.to} key={s.v} className="glass rounded-xl p-5 text-center hover:border-primary/40 hover:-translate-y-0.5 transition group">
-            <div className="font-display text-2xl md:text-3xl font-bold text-gradient">{s.k}</div>
-            <div className="text-xs text-muted-foreground mt-1 group-hover:text-foreground">{s.v} →</div>
-          </Link>
-        ))}
-      </section>
+
 
       {/* Features bento */}
       <section id="features" className="max-w-7xl mx-auto px-6 py-20">
