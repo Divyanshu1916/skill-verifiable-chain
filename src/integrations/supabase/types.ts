@@ -71,6 +71,75 @@ export type Database = {
         }
         Relationships: []
       }
+      feedback: {
+        Row: {
+          comments: string | null
+          created_at: string
+          email: string | null
+          id: string
+          improvements: string | null
+          liked_most: string | null
+          most_useful_feature: string | null
+          name: string | null
+          nft_rating: number | null
+          overall_rating: number
+          public_profile_rating: number | null
+          qr_verification_rating: number | null
+          reactions: string[]
+          recruiter_dashboard_rating: number | null
+          reputation_score_rating: number | null
+          skill_passport_rating: number | null
+          suggestions: string | null
+          user_experience_rating: number | null
+          user_id: string | null
+          wallet_login_rating: number | null
+        }
+        Insert: {
+          comments?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          improvements?: string | null
+          liked_most?: string | null
+          most_useful_feature?: string | null
+          name?: string | null
+          nft_rating?: number | null
+          overall_rating: number
+          public_profile_rating?: number | null
+          qr_verification_rating?: number | null
+          reactions?: string[]
+          recruiter_dashboard_rating?: number | null
+          reputation_score_rating?: number | null
+          skill_passport_rating?: number | null
+          suggestions?: string | null
+          user_experience_rating?: number | null
+          user_id?: string | null
+          wallet_login_rating?: number | null
+        }
+        Update: {
+          comments?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          improvements?: string | null
+          liked_most?: string | null
+          most_useful_feature?: string | null
+          name?: string | null
+          nft_rating?: number | null
+          overall_rating?: number
+          public_profile_rating?: number | null
+          qr_verification_rating?: number | null
+          reactions?: string[]
+          recruiter_dashboard_rating?: number | null
+          reputation_score_rating?: number | null
+          skill_passport_rating?: number | null
+          suggestions?: string | null
+          user_experience_rating?: number | null
+          user_id?: string | null
+          wallet_login_rating?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
