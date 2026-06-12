@@ -23,9 +23,6 @@ export const Route = createFileRoute("/")({
 function Landing() {
   return (
     <div className="min-h-screen relative">
-      {/* Aurora background */}
-      <GradientOrb className="top-[-200px] left-1/2 -translate-x-1/2 h-[600px] w-[1000px]" />
-      <GradientOrb className="top-[40%] right-[-150px] h-[400px] w-[400px]" />
 
       {/* Nav */}
       <header className="sticky top-0 z-40 glass border-b border-border/40">
