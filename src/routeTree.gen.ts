@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -28,6 +29,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authenticated/certificates'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 import { Route as AuthenticatedNftIdRouteImport } from './routes/_authenticated/nft.$id'
+import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated/admin.feedback'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -37,6 +39,11 @@ const SignupRoute = SignupRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeedbackRoute = FeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoRoute = DemoRouteImport.update({
@@ -124,11 +131,18 @@ const AuthenticatedNftIdRoute = AuthenticatedNftIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => AuthenticatedNftRoute,
 } as any)
+const AuthenticatedAdminFeedbackRoute =
+  AuthenticatedAdminFeedbackRouteImport.update({
+    id: '/admin/feedback',
+    path: '/admin/feedback',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/demo': typeof DemoRoute
+  '/feedback': typeof FeedbackRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
@@ -143,12 +157,14 @@ export interface FileRoutesByFullPath {
   '/wallet': typeof AuthenticatedWalletRoute
   '/passport/$username': typeof PassportUsernameRoute
   '/verify/$credentialId': typeof VerifyCredentialIdRoute
+  '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/nft/$id': typeof AuthenticatedNftIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/demo': typeof DemoRoute
+  '/feedback': typeof FeedbackRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
@@ -163,6 +179,7 @@ export interface FileRoutesByTo {
   '/wallet': typeof AuthenticatedWalletRoute
   '/passport/$username': typeof PassportUsernameRoute
   '/verify/$credentialId': typeof VerifyCredentialIdRoute
+  '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/nft/$id': typeof AuthenticatedNftIdRoute
 }
 export interface FileRoutesById {
@@ -171,6 +188,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/demo': typeof DemoRoute
+  '/feedback': typeof FeedbackRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
@@ -185,6 +203,7 @@ export interface FileRoutesById {
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/passport/$username': typeof PassportUsernameRoute
   '/verify/$credentialId': typeof VerifyCredentialIdRoute
+  '/_authenticated/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
   '/_authenticated/nft/$id': typeof AuthenticatedNftIdRoute
 }
 export interface FileRouteTypes {
@@ -193,6 +212,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/demo'
+    | '/feedback'
     | '/login'
     | '/signup'
     | '/analytics'
@@ -207,12 +227,14 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/passport/$username'
     | '/verify/$credentialId'
+    | '/admin/feedback'
     | '/nft/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/demo'
+    | '/feedback'
     | '/login'
     | '/signup'
     | '/analytics'
@@ -227,6 +249,7 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/passport/$username'
     | '/verify/$credentialId'
+    | '/admin/feedback'
     | '/nft/$id'
   id:
     | '__root__'
@@ -234,6 +257,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/demo'
+    | '/feedback'
     | '/login'
     | '/signup'
     | '/_authenticated/analytics'
@@ -248,6 +272,7 @@ export interface FileRouteTypes {
     | '/_authenticated/wallet'
     | '/passport/$username'
     | '/verify/$credentialId'
+    | '/_authenticated/admin/feedback'
     | '/_authenticated/nft/$id'
   fileRoutesById: FileRoutesById
 }
@@ -256,6 +281,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   DemoRoute: typeof DemoRoute
+  FeedbackRoute: typeof FeedbackRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
   PassportUsernameRoute: typeof PassportUsernameRoute
@@ -276,6 +302,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/feedback': {
+      id: '/feedback'
+      path: '/feedback'
+      fullPath: '/feedback'
+      preLoaderRoute: typeof FeedbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo': {
@@ -397,6 +430,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNftIdRouteImport
       parentRoute: typeof AuthenticatedNftRoute
     }
+    '/_authenticated/admin/feedback': {
+      id: '/_authenticated/admin/feedback'
+      path: '/admin/feedback'
+      fullPath: '/admin/feedback'
+      preLoaderRoute: typeof AuthenticatedAdminFeedbackRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -422,6 +462,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSkillsRoute: typeof AuthenticatedSkillsRoute
   AuthenticatedVerifyRoute: typeof AuthenticatedVerifyRoute
   AuthenticatedWalletRoute: typeof AuthenticatedWalletRoute
+  AuthenticatedAdminFeedbackRoute: typeof AuthenticatedAdminFeedbackRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -435,6 +476,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSkillsRoute: AuthenticatedSkillsRoute,
   AuthenticatedVerifyRoute: AuthenticatedVerifyRoute,
   AuthenticatedWalletRoute: AuthenticatedWalletRoute,
+  AuthenticatedAdminFeedbackRoute: AuthenticatedAdminFeedbackRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -445,6 +487,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   DemoRoute: DemoRoute,
+  FeedbackRoute: FeedbackRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
   PassportUsernameRoute: PassportUsernameRoute,
@@ -453,13 +496,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
