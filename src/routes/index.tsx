@@ -229,7 +229,12 @@ function Landing() {
             <SocialLink href="https://x.com/ITS_Divyansh_u" label="X" icon={<XIcon />} />
             <SocialLink href="https://discordapp.com/users/1507933325598392430" label="Discord" icon={<DiscordIcon />} />
           </div>
-          <div>© 2026 SkillChain · Built on Polygon</div>
+          <div className="flex items-center gap-3">
+            <Button asChild size="sm" variant="outline" className="border-primary/40 hover:border-primary/70">
+              <Link to="/feedback">⭐ Rate SkillChain</Link>
+            </Button>
+            <span>© 2026 SkillChain · Built on Polygon</span>
+          </div>
         </div>
       </footer>
     </div>
