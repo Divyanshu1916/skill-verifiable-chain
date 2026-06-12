@@ -6,6 +6,7 @@ import {
   Shield, Sparkles, Zap, Wallet, BadgeCheck, ArrowRight,
   FileBadge, Search, QrCode, Hexagon, BarChart3, PlayCircle, Star, Globe,
 } from "lucide-react";
+import { HeroBackground } from "@/components/HeroBackground";
 
 export const Route = createFileRoute("/")({
   head: () => ({
