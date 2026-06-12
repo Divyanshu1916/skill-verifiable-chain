@@ -1,12 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
-import { GradientOrb } from "@/components/GradientOrb";
 import {
   Shield, Sparkles, Zap, Wallet, BadgeCheck, ArrowRight,
   FileBadge, Search, QrCode, Hexagon, BarChart3, PlayCircle, Star, Globe,
 } from "lucide-react";
-import { HeroBackground } from "@/components/HeroBackground";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -47,7 +45,36 @@ function Landing() {
       {/* Hero */}
       <section className="relative px-3 sm:px-6 pt-6 md:pt-10">
         <div className="relative max-w-7xl mx-auto rounded-[28px] border border-white/10 shadow-[0_30px_120px_-30px_oklch(0.5_0.22_295_/_0.55)] overflow-hidden">
-          <HeroBackground />
+          {/* Static premium background */}
+          <div className="absolute inset-0 pointer-events-none" aria-hidden>
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(120% 80% at 20% 20%, oklch(0.42 0.22 295 / 0.85), transparent 60%)," +
+                  "radial-gradient(110% 80% at 85% 30%, oklch(0.45 0.24 255 / 0.8), transparent 60%)," +
+                  "radial-gradient(120% 90% at 60% 100%, oklch(0.55 0.24 340 / 0.75), transparent 65%)," +
+                  "linear-gradient(135deg, oklch(0.16 0.08 285), oklch(0.13 0.06 260))",
+              }}
+            />
+            <div className="absolute inset-0 grid-bg opacity-25" />
+            <div
+              className="absolute -top-24 -left-20 h-[420px] w-[420px] rounded-full blur-3xl opacity-40"
+              style={{ background: "radial-gradient(circle, oklch(0.7 0.25 305 / 0.5), transparent 60%)" }}
+            />
+            <div
+              className="absolute -bottom-32 -right-16 h-[480px] w-[480px] rounded-full blur-3xl opacity-35"
+              style={{ background: "radial-gradient(circle, oklch(0.7 0.22 255 / 0.5), transparent 60%)" }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to bottom, oklch(0 0 0 / 0.05), transparent 30%, oklch(0 0 0 / 0.35))",
+              }}
+            />
+            <div className="absolute inset-0 rounded-[28px] ring-1 ring-white/10 [box-shadow:inset_0_0_60px_oklch(0.7_0.22_305_/_0.12)]" />
+          </div>
 
           {/* Content */}
           <div className="relative px-5 sm:px-8 md:px-12 pt-16 md:pt-24 pb-12 md:pb-16 text-center">
