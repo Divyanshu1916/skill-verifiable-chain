@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
-import { BadgeCheck, Hexagon, ExternalLink, Sparkles, MapPin, ShieldCheck, Copy, Share2, Download, QrCode } from "lucide-react";
+import { BadgeCheck, Hexagon, ExternalLink, Sparkles, MapPin, ShieldCheck, Copy, Share2, Download, QrCode, Globe } from "lucide-react";
 import { explorerUrl, shortAddress } from "@/lib/web3";
 import { toast } from "sonner";
 import { QRCodeSVG } from "qrcode.react";
@@ -102,6 +102,12 @@ function Passport() {
                 )}
                 <span className="inline-flex items-center gap-1 text-success"><ShieldCheck className="h-3 w-3" /> Verified on Polygon</span>
               </div>
+              <div className="flex items-center gap-2 mt-3">
+                <SocialChip href="https://github.com/Divyanshu1916" label="GitHub" icon={<GitHubIcon />} />
+                <SocialChip href="https://www.linkedin.com/in/divyanshu-kumar11" label="LinkedIn" icon={<LinkedInIcon />} />
+                <SocialChip href="https://x.com/ITS_Divyansh_u" label="X" icon={<XIcon />} />
+                <SocialChip href="https://discordapp.com/users/1507933325598392430" label="Discord" icon={<DiscordIcon />} />
+              </div>
             </div>
             <ScoreRing value={score} size={120} />
           </div>
@@ -192,5 +198,61 @@ function Passport() {
         </section>
       </main>
     </div>
+  );
+}
+
+function SocialChip({ href, label, icon }: { href: string; label: string; icon: React.ReactNode }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="inline-flex items-center gap-1.5 rounded-lg glass px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-300"
+    >
+      {icon}
+      {label}
+    </a>
+  );
+}
+
+function GitHubIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+      <path d="M9 18c-4.51 2-5-2-7-2" />
+    </svg>
+  );
+}
+
+function LinkedInIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect width="4" height="12" x="2" y="9" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  );
+}
+
+function XIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
+      <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
+    </svg>
+  );
+}
+
+function DiscordIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+      <path d="M15 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+      <path d="M7.5 5.5C4.5 6.5 3 9 3 9l3.5 2.5" />
+      <path d="M16.5 5.5c3 1 4.5 3.5 4.5 3.5l-3.5 2.5" />
+      <path d="M18 18c-1.5 1-3.5 1.5-6 1.5s-4.5-.5-6-1.5" />
+      <path d="M3 9v7.5a2.5 2.5 0 0 0 2.5 2.5h13a2.5 2.5 0 0 0 2.5-2.5V9" />
+    </svg>
   );
 }
