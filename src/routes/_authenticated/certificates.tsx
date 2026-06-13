@@ -27,6 +27,7 @@ type Cred = {
 function CertsPage() {
   const { user } = useAuth();
   const [creds, setCreds] = useState<Cred[]>([]);
+  const [profileName, setProfileName] = useState<string | null>(null);
   const [title, setTitle] = useState(""); const [issuer, setIssuer] = useState("");
   const [issuedAt, setIssuedAt] = useState(""); const [desc, setDesc] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -35,8 +36,12 @@ function CertsPage() {
 
   const refresh = async () => {
     if (!user) return;
-    const { data } = await supabase.from("credentials").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
+    const [{ data }, { data: pf }] = await Promise.all([
+      supabase.from("credentials").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+      supabase.from("profiles").select("full_name").eq("id", user.id).maybeSingle(),
+    ]);
     setCreds((data as Cred[]) ?? []);
+    setProfileName(pf?.full_name ?? null);
   };
   useEffect(() => { refresh(); }, [user?.id]);
 
