@@ -165,18 +165,23 @@ function Landing() {
           <h2 className="font-display text-3xl md:text-5xl font-bold">Everything your career needs, on-chain.</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-5">
-          {features.map((f) => (
-            <Link to={f.to} key={f.title} className="glass rounded-2xl p-6 group hover:border-primary/40 transition-all hover:-translate-y-1">
-              <div className="h-11 w-11 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 grid place-items-center mb-4 group-hover:animate-pulse-glow">
-                <f.icon className="h-5 w-5 text-primary" />
-              </div>
-              <h3 className="font-display font-semibold text-lg">{f.title}</h3>
-              <p className="text-sm text-muted-foreground mt-2">{f.desc}</p>
-              <div className="mt-4 text-xs text-primary inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
-                Open <ArrowRight className="h-3 w-3" />
-              </div>
-            </Link>
-          ))}
+          {features.map((f) => {
+            if (f.title === "MetaMask wallet") {
+              return <WalletFeatureCard key={f.title} icon={f.icon} title={f.title} desc={f.desc} />;
+            }
+            return (
+              <Link to={f.to} key={f.title} className="glass rounded-2xl p-6 group hover:border-primary/40 transition-all hover:-translate-y-1">
+                <div className="h-11 w-11 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 grid place-items-center mb-4 group-hover:animate-pulse-glow">
+                  <f.icon className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="font-display font-semibold text-lg">{f.title}</h3>
+                <p className="text-sm text-muted-foreground mt-2">{f.desc}</p>
+                <div className="mt-4 text-xs text-primary inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+                  Open <ArrowRight className="h-3 w-3" />
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
