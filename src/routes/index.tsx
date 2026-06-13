@@ -36,6 +36,7 @@ function Landing() {
             <Link to="/feedback" className="hover:text-foreground transition">Feedback</Link>
           </nav>
           <div className="flex items-center gap-2 shrink-0">
+            <div className="hidden sm:block"><WalletButton compact /></div>
             <Button asChild variant="ghost" size="sm"><Link to="/login">Sign in</Link></Button>
             <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
               <Link to="/signup">Get started</Link>
