@@ -1,16 +1,26 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { type ReactNode } from "react";
 import { Logo } from "./Logo";
 import { Button } from "./ui/button";
 import { useAuth } from "@/lib/auth-context";
-import { LayoutDashboard, LogIn } from "lucide-react";
+import { LayoutDashboard, LogIn, ArrowLeft } from "lucide-react";
 
 export function PublicShell({ children, title }: { children: ReactNode; title?: string }) {
   const { user } = useAuth();
+  const router = useRouter();
+  const goBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) router.history.back();
+    else router.navigate({ to: "/" });
+  };
   return (
     <div className="min-h-screen flex flex-col">
       <header className="h-16 border-b border-border/40 glass sticky top-0 z-30 flex items-center justify-between px-4 md:px-8">
-        <Link to="/"><Logo /></Link>
+        <div className="flex items-center gap-2">
+          <Button size="icon" variant="ghost" onClick={goBack} aria-label="Go back" className="h-9 w-9">
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <Link to="/"><Logo /></Link>
+        </div>
         {title && <h1 className="hidden md:block font-display text-lg font-semibold text-muted-foreground">{title}</h1>}
         <div className="flex items-center gap-2">
           {user ? (
