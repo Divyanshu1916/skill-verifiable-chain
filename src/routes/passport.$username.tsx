@@ -2,19 +2,34 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
-import { BadgeCheck, Hexagon, ExternalLink, Sparkles, MapPin, ShieldCheck, Copy, Share2, Download, QrCode, Globe } from "lucide-react";
+import {
+  BadgeCheck, Hexagon, ExternalLink, Sparkles, MapPin, ShieldCheck, Copy,
+  Share2, Download, QrCode, Linkedin, Clock, Wallet, Award, ChevronRight,
+} from "lucide-react";
 import { explorerUrl, shortAddress } from "@/lib/web3";
 import { toast } from "sonner";
 import { QRCodeSVG } from "qrcode.react";
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useMemo, useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { ScoreRing } from "@/components/ScoreRing";
 
+type Profile = {
+  id: string; full_name: string | null; username: string | null; headline: string | null;
+  bio: string | null; location: string | null; wallet_address: string | null;
+  avatar_url: string | null; reputation_score: number;
+};
+type Skill = { id: string; name: string; level: number; category: string | null; endorsements: number; created_at: string };
+type Cred = {
+  id: string; credential_id: string | null; title: string; issuer: string; description: string | null;
+  minted: boolean; verified: boolean; tx_hash: string | null; nft_token_id: string | null;
+  issued_at: string | null; chain: string | null; created_at: string; file_url: string | null;
+};
+
 export const Route = createFileRoute("/passport/$username")({
-  head: ({ loaderData }: { loaderData?: { profile: { full_name: string | null; username: string | null; headline: string | null } } }) => ({
+  head: ({ loaderData }: { loaderData?: { profile: Profile } }) => ({
     meta: [
       { title: `${loaderData?.profile.full_name ?? loaderData?.profile.username ?? "Skill Passport"} — SkillChain` },
-      { name: "description", content: loaderData?.profile.headline ?? "Verifiable skill passport on Polygon." },
+      { name: "description", content: loaderData?.profile.headline ?? loaderData?.profile.bio ?? "Verifiable skill passport on Polygon." },
       { property: "og:title", content: `${loaderData?.profile.full_name ?? "Skill Passport"} — SkillChain` },
       { property: "og:description", content: loaderData?.profile.headline ?? "On-chain credentials." },
     ],
@@ -35,19 +50,39 @@ export const Route = createFileRoute("/passport/$username")({
 
 function Passport() {
   const { profile, skills, credentials } = Route.useLoaderData() as {
-    profile: { id: string; full_name: string | null; username: string | null; headline: string | null; location: string | null; wallet_address: string | null; reputation_score: number };
-    skills: { id: string; name: string; level: number; category: string | null }[];
-    credentials: { id: string; credential_id: string | null; title: string; issuer: string; minted: boolean; verified: boolean; tx_hash: string | null; nft_token_id: string | null; issued_at: string | null }[];
+    profile: Profile; skills: Skill[]; credentials: Cred[];
   };
   const minted = credentials.filter((c) => c.minted).length;
-  const score = profile.reputation_score || Math.min(100, minted * 15 + credentials.filter((c) => c.verified).length * 10 + skills.length * 4);
+  const verifiedCount = credentials.filter((c) => c.verified).length;
+  const endorsements = skills.reduce((a, s) => a + (s.endorsements || 0), 0);
+  const score = profile.reputation_score || Math.min(100, minted * 15 + verifiedCount * 10 + skills.length * 4);
   const passportUrl = typeof window !== "undefined" ? window.location.href : "";
+
+  const [openSkill, setOpenSkill] = useState<Skill | null>(null);
+  const [openNft, setOpenNft] = useState<Cred | null>(null);
+  const [openTx, setOpenTx] = useState<Cred | null>(null);
+
+  const timeline = useMemo(() =>
+    [...credentials]
+      .filter((c) => c.verified || c.minted)
+      .sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))
+      .slice(0, 8),
+  [credentials]);
 
   const share = async () => {
     if (typeof navigator !== "undefined" && navigator.share) {
       try { await navigator.share({ title: `${profile.full_name || profile.username} — SkillChain`, url: passportUrl }); return; } catch {}
     }
     navigator.clipboard.writeText(passportUrl); toast.success("Link copied to clipboard");
+  };
+
+  const shareLinkedIn = () => {
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(passportUrl)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const copy = (text: string, label = "Copied") => {
+    navigator.clipboard.writeText(text); toast.success(label);
   };
 
   const downloadPDF = async () => {
@@ -58,7 +93,8 @@ function Passport() {
     doc.text(`@${profile.username} · Reputation ${score}/100`, 20, 33);
     if (profile.headline) doc.text(profile.headline, 20, 41);
     doc.setTextColor(0); doc.setFontSize(14); doc.text("Skills", 20, 55);
-    doc.setFontSize(10); skills.slice(0, 20).forEach((s, i) => doc.text(`• ${s.name} (Lvl ${s.level}/5)${s.category ? " — " + s.category : ""}`, 22, 63 + i * 6));
+    doc.setFontSize(10);
+    skills.slice(0, 20).forEach((s, i) => doc.text(`• ${s.name} (Lvl ${s.level}/5)${s.category ? " — " + s.category : ""}${s.endorsements ? `  ★ ${s.endorsements}` : ""}`, 22, 63 + i * 6));
     let y = 63 + Math.min(20, skills.length) * 6 + 8;
     doc.setFontSize(14); doc.text("Credentials", 20, y); y += 8;
     doc.setFontSize(10);
@@ -72,6 +108,8 @@ function Passport() {
     doc.save(`${profile.username || "passport"}-skillchain.pdf`);
   };
 
+  const initials = (profile.full_name || profile.username || "?").slice(0, 1).toUpperCase();
+
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-30 glass border-b border-border/40">
@@ -83,39 +121,42 @@ function Passport() {
 
       <main className="max-w-5xl mx-auto px-6 py-10 space-y-6">
         {/* Hero */}
-        <div className="glass-strong rounded-3xl p-8 relative overflow-hidden">
-          <div className="absolute -top-32 -right-32 h-80 w-80 rounded-full aurora" />
+        <div className="glass-strong rounded-3xl p-6 md:p-8 relative overflow-hidden animate-in fade-in duration-500">
+          <div className="absolute -top-32 -right-32 h-80 w-80 rounded-full aurora pointer-events-none" />
           <div className="relative grid md:grid-cols-[auto,1fr,auto] gap-6 items-center">
-            <div className="h-24 w-24 rounded-2xl bg-gradient-to-br from-primary to-accent grid place-items-center text-3xl font-display font-bold text-primary-foreground shrink-0">
-              {(profile.full_name || profile.username || "?").slice(0, 1).toUpperCase()}
-            </div>
+            {profile.avatar_url ? (
+              <img src={profile.avatar_url} alt={profile.full_name || profile.username || "Avatar"} className="h-24 w-24 rounded-2xl object-cover shrink-0 border border-border" />
+            ) : (
+              <div className="h-24 w-24 rounded-2xl bg-gradient-to-br from-primary to-accent grid place-items-center text-3xl font-display font-bold text-primary-foreground shrink-0">
+                {initials}
+              </div>
+            )}
             <div className="min-w-0">
-              <h1 className="font-display text-3xl md:text-4xl font-bold truncate">{profile.full_name || profile.username}</h1>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="font-display text-3xl md:text-4xl font-bold truncate">{profile.full_name || profile.username}</h1>
+                <VerifiedBadgeDialog profile={profile} minted={minted} verifiedCount={verifiedCount} />
+              </div>
               <div className="text-sm text-muted-foreground mt-1">@{profile.username}</div>
               {profile.headline && <p className="mt-3 text-foreground/80">{profile.headline}</p>}
+              {profile.bio && <p className="mt-2 text-sm text-muted-foreground">{profile.bio}</p>}
               <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-muted-foreground">
                 {profile.location && <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" /> {profile.location}</span>}
                 {profile.wallet_address && (
-                  <button onClick={() => { navigator.clipboard.writeText(profile.wallet_address!); toast.success("Wallet copied"); }} className="font-mono inline-flex items-center gap-1 hover:text-primary">
-                    {shortAddress(profile.wallet_address)} <Copy className="h-3 w-3" />
+                  <button onClick={() => copy(profile.wallet_address!, "Wallet copied")} className="font-mono inline-flex items-center gap-1 hover:text-primary transition">
+                    <Wallet className="h-3 w-3" /> {shortAddress(profile.wallet_address)} <Copy className="h-3 w-3" />
                   </button>
                 )}
                 <span className="inline-flex items-center gap-1 text-success"><ShieldCheck className="h-3 w-3" /> Verified on Polygon</span>
               </div>
-              <div className="flex items-center gap-2 mt-3">
-                <SocialChip href="https://github.com/Divyanshu1916" label="GitHub" icon={<GitHubIcon />} />
-                <SocialChip href="https://www.linkedin.com/in/divyanshu-kumar11" label="LinkedIn" icon={<LinkedInIcon />} />
-                <SocialChip href="https://x.com/ITS_Divyansh_u" label="X" icon={<XIcon />} />
-                <SocialChip href="https://discordapp.com/users/1507933325598392430" label="Discord" icon={<DiscordIcon />} />
-              </div>
             </div>
-            <ScoreRing value={score} size={120} />
+            <ScoreBreakdownDialog score={score} minted={minted} verifiedCount={verifiedCount} skills={skills.length} endorsements={endorsements} />
           </div>
 
           <div className="relative mt-6 flex flex-wrap gap-2">
             <Button size="sm" className="gap-2 bg-gradient-to-r from-primary to-accent text-primary-foreground" onClick={share}><Share2 className="h-4 w-4" /> Share</Button>
-            <Button size="sm" variant="outline" className="gap-2" onClick={() => { navigator.clipboard.writeText(passportUrl); toast.success("Link copied"); }}><Copy className="h-4 w-4" /> Copy link</Button>
+            <Button size="sm" variant="outline" className="gap-2" onClick={() => copy(passportUrl, "Public URL copied")}><Copy className="h-4 w-4" /> Copy URL</Button>
             <Button size="sm" variant="outline" className="gap-2" onClick={downloadPDF}><Download className="h-4 w-4" /> Download PDF</Button>
+            <Button size="sm" variant="outline" className="gap-2" onClick={shareLinkedIn}><Linkedin className="h-4 w-4" /> LinkedIn</Button>
             <Dialog>
               <DialogTrigger asChild>
                 <Button size="sm" variant="outline" className="gap-2"><QrCode className="h-4 w-4" /> Show QR</Button>
@@ -129,130 +170,323 @@ function Passport() {
               </DialogContent>
             </Dialog>
           </div>
+
+          {/* Quick stats */}
+          <div className="relative mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <Stat label="Reputation" value={`${score}/100`} />
+            <Stat label="Verified" value={verifiedCount} />
+            <Stat label="NFT credentials" value={minted} />
+            <Stat label="Endorsements" value={endorsements} />
+          </div>
         </div>
 
         {/* Skills */}
         <section className="glass rounded-2xl p-6">
           <h2 className="font-display text-xl font-semibold flex items-center gap-2 mb-4"><Sparkles className="h-5 w-5 text-primary" /> Skills</h2>
           {skills.length === 0 ? <p className="text-sm text-muted-foreground">No skills listed yet.</p> : (
-            <div className="flex flex-wrap gap-2">
-              {skills.map((s) => (
-                <span key={s.id} className="glass rounded-full px-3 py-1.5 text-xs inline-flex items-center gap-2">
-                  {s.name}
-                  <span className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <span key={i} className={`h-1.5 w-1.5 rounded-full ${i < s.level ? "bg-primary" : "bg-muted"}`} />
+            <div className="space-y-4">
+              {Object.entries(groupBy(skills, (s) => s.category || "General")).map(([cat, items]) => (
+                <div key={cat}>
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2">{cat}</div>
+                  <div className="flex flex-wrap gap-2">
+                    {items.map((s) => (
+                      <button
+                        key={s.id}
+                        onClick={() => setOpenSkill(s)}
+                        className="glass rounded-full px-3 py-1.5 text-xs inline-flex items-center gap-2 hover:border-primary/40 hover:-translate-y-0.5 transition-all"
+                      >
+                        {s.name}
+                        <span className="flex gap-0.5">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <span key={i} className={`h-1.5 w-1.5 rounded-full ${i < s.level ? "bg-primary" : "bg-muted"}`} />
+                          ))}
+                        </span>
+                        {s.endorsements > 0 && <span className="text-[10px] text-accent">★ {s.endorsements}</span>}
+                      </button>
                     ))}
-                  </span>
-                </span>
+                  </div>
+                </div>
               ))}
             </div>
           )}
         </section>
 
         {/* NFT Credentials Grid */}
-        {credentials.filter((c) => c.minted).length > 0 && (
+        {minted > 0 && (
           <section className="glass rounded-2xl p-6">
             <h2 className="font-display text-xl font-semibold flex items-center gap-2 mb-4"><Hexagon className="h-5 w-5 text-accent" /> NFT Credentials</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {credentials.filter((c) => c.minted).map((c, i) => (
-                <div key={c.id} className="glass rounded-xl p-3">
-                  <div className="relative aspect-[5/3] rounded-lg overflow-hidden mb-3" style={{ background: `linear-gradient(135deg, oklch(0.55 0.2 ${195 + i * 30}), oklch(0.5 0.22 ${305 + i * 20}))` }}>
+                <button
+                  key={c.id}
+                  onClick={() => setOpenNft(c)}
+                  className="glass rounded-xl p-3 text-left hover:border-accent/50 hover:-translate-y-0.5 transition-all"
+                >
+                  <div
+                    className="relative aspect-[5/3] rounded-lg overflow-hidden mb-3"
+                    style={{ background: `linear-gradient(135deg, oklch(0.55 0.2 ${195 + i * 30}), oklch(0.5 0.22 ${305 + i * 20}))` }}
+                  >
                     <Hexagon className="absolute inset-0 m-auto h-12 w-12 text-white/90" strokeWidth={1.2} />
+                    {c.nft_token_id && (
+                      <span className="absolute top-2 right-2 text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 text-white">#{c.nft_token_id.slice(0, 6)}</span>
+                    )}
                   </div>
                   <div className="font-semibold text-sm truncate">{c.title}</div>
                   <div className="text-xs text-muted-foreground truncate">{c.issuer}</div>
-                </div>
+                  <div className="mt-2 text-[10px] text-primary inline-flex items-center gap-1">View details <ChevronRight className="h-3 w-3" /></div>
+                </button>
               ))}
             </div>
           </section>
         )}
 
-        {/* Credentials */}
+        {/* All credentials */}
         <section className="glass rounded-2xl p-6">
-          <h2 className="font-display text-xl font-semibold flex items-center gap-2 mb-4"><BadgeCheck className="h-5 w-5 text-accent" /> All Credentials</h2>
+          <h2 className="font-display text-xl font-semibold flex items-center gap-2 mb-4"><BadgeCheck className="h-5 w-5 text-accent" /> Certificates</h2>
           {credentials.length === 0 ? <p className="text-sm text-muted-foreground">No credentials yet.</p> : (
             <div className="grid sm:grid-cols-2 gap-3">
               {credentials.map((c) => (
-                <Link key={c.id} to="/verify/$credentialId" params={{ credentialId: c.credential_id || c.id }} className="glass rounded-xl p-4 hover:border-primary/40 transition">
+                <div key={c.id} className="glass rounded-xl p-4 hover:border-primary/40 transition group">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <div className="font-semibold truncate">{c.title}</div>
+                      <Link
+                        to="/verify/$credentialId"
+                        params={{ credentialId: c.credential_id || c.id }}
+                        className="font-semibold truncate block hover:text-primary"
+                      >
+                        {c.title}
+                      </Link>
                       <div className="text-xs text-muted-foreground truncate">{c.issuer}</div>
+                      {c.issued_at && <div className="text-[10px] text-muted-foreground mt-1">Issued {fmtDate(c.issued_at)}</div>}
                     </div>
                     {c.minted && <Hexagon className="h-5 w-5 text-accent shrink-0" />}
                   </div>
-                  <div className="flex gap-1 mt-3 flex-wrap">
+                  <div className="flex gap-1 mt-3 flex-wrap items-center">
                     {c.verified && <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-success/10 text-success border border-success/30">VERIFIED</span>}
                     {c.minted && <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent/10 text-accent border border-accent/30">NFT</span>}
                     {c.tx_hash && (
-                      <a href={explorerUrl(c.tx_hash)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/30 inline-flex items-center gap-1">
-                        {c.tx_hash.slice(0, 10)}… <ExternalLink className="h-2.5 w-2.5" />
-                      </a>
+                      <button
+                        onClick={() => setOpenTx(c)}
+                        className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/30 inline-flex items-center gap-1 hover:bg-primary/20"
+                      >
+                        {c.tx_hash.slice(0, 10)}…
+                      </button>
                     )}
+                    <Link
+                      to="/verify/$credentialId"
+                      params={{ credentialId: c.credential_id || c.id }}
+                      className="ml-auto text-[10px] text-primary inline-flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition"
+                    >
+                      Verify <ChevronRight className="h-3 w-3" />
+                    </Link>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           )}
         </section>
+
+        {/* Verification Timeline */}
+        {timeline.length > 0 && (
+          <section className="glass rounded-2xl p-6">
+            <h2 className="font-display text-xl font-semibold flex items-center gap-2 mb-4"><Clock className="h-5 w-5 text-primary" /> Verification History</h2>
+            <ol className="relative border-l border-border/60 ml-2 space-y-4">
+              {timeline.map((c) => (
+                <li key={c.id} className="pl-6 relative">
+                  <span className="absolute -left-[7px] top-1.5 h-3 w-3 rounded-full bg-gradient-to-br from-primary to-accent ring-4 ring-background" />
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <Link
+                      to="/verify/$credentialId"
+                      params={{ credentialId: c.credential_id || c.id }}
+                      className="font-medium text-sm hover:text-primary"
+                    >
+                      {c.title}
+                    </Link>
+                    <span className="text-[10px] text-muted-foreground">{fmtDate(c.created_at)}</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">{c.issuer}</div>
+                  <div className="flex gap-1 mt-1">
+                    {c.verified && <span className="text-[10px] text-success">✓ Verified</span>}
+                    {c.minted && <span className="text-[10px] text-accent">✦ NFT minted</span>}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
+        <div className="text-center text-xs text-muted-foreground py-6">
+          Public skill passport · Powered by <Link to="/" className="text-primary">SkillChain</Link>
+        </div>
       </main>
+
+      {/* Skill detail dialog */}
+      <Dialog open={!!openSkill} onOpenChange={(o) => !o && setOpenSkill(null)}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-primary" /> {openSkill?.name}</DialogTitle>
+            <DialogDescription>{openSkill?.category || "General"} skill</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 text-sm">
+            <Row label="Level"><div className="flex gap-1">{Array.from({ length: 5 }).map((_, i) => <span key={i} className={`h-2 w-6 rounded ${i < (openSkill?.level || 0) ? "bg-primary" : "bg-muted"}`} />)}</div></Row>
+            <Row label="Endorsements"><span className="text-accent">★ {openSkill?.endorsements ?? 0}</span></Row>
+            <Row label="Added"><span className="text-muted-foreground">{openSkill && fmtDate(openSkill.created_at)}</span></Row>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* NFT detail dialog */}
+      <Dialog open={!!openNft} onOpenChange={(o) => !o && setOpenNft(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2"><Hexagon className="h-4 w-4 text-accent" /> {openNft?.title}</DialogTitle>
+            <DialogDescription>{openNft?.issuer}</DialogDescription>
+          </DialogHeader>
+          {openNft && (
+            <div className="space-y-3 text-sm">
+              <div
+                className="aspect-[5/3] rounded-xl overflow-hidden relative"
+                style={{ background: `linear-gradient(135deg, oklch(0.55 0.2 220), oklch(0.5 0.22 320))` }}
+              >
+                <Hexagon className="absolute inset-0 m-auto h-16 w-16 text-white/90" strokeWidth={1.2} />
+              </div>
+              {openNft.nft_token_id && <Row label="Token ID"><span className="font-mono text-xs">{openNft.nft_token_id}</span></Row>}
+              {openNft.credential_id && <Row label="Credential"><span className="font-mono text-xs">{openNft.credential_id}</span></Row>}
+              <Row label="Chain"><span className="capitalize">{openNft.chain || "polygon"}</span></Row>
+              {openNft.issued_at && <Row label="Issued"><span>{fmtDate(openNft.issued_at)}</span></Row>}
+              {openNft.tx_hash && (
+                <Row label="Tx hash">
+                  <button onClick={() => { setOpenNft(null); setOpenTx(openNft); }} className="font-mono text-xs text-primary hover:underline">
+                    {openNft.tx_hash.slice(0, 16)}…
+                  </button>
+                </Row>
+              )}
+              <div className="flex gap-2 pt-2">
+                <Button asChild size="sm" className="flex-1 bg-gradient-to-r from-primary to-accent text-primary-foreground">
+                  <Link to="/verify/$credentialId" params={{ credentialId: openNft.credential_id || openNft.id }}>
+                    <ShieldCheck className="h-4 w-4" /> Verify NFT
+                  </Link>
+                </Button>
+                {openNft.tx_hash && (
+                  <Button asChild size="sm" variant="outline">
+                    <a href={explorerUrl(openNft.tx_hash)} target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /></a>
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Blockchain proof modal */}
+      <Dialog open={!!openTx} onOpenChange={(o) => !o && setOpenTx(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-success" /> Blockchain Proof</DialogTitle>
+            <DialogDescription>Anchored on {openTx?.chain || "polygon"} — tamper-evident.</DialogDescription>
+          </DialogHeader>
+          {openTx && (
+            <div className="space-y-3 text-sm">
+              <div>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Transaction hash</div>
+                <div className="font-mono text-xs break-all glass rounded-lg p-3 mt-1">{openTx.tx_hash}</div>
+              </div>
+              {openTx.nft_token_id && (
+                <Row label="Token"><span className="font-mono text-xs">{openTx.nft_token_id}</span></Row>
+              )}
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" className="flex-1 gap-2" onClick={() => copy(openTx.tx_hash || "", "Hash copied")}><Copy className="h-4 w-4" /> Copy</Button>
+                <Button asChild size="sm" className="flex-1 gap-2 bg-gradient-to-r from-primary to-accent text-primary-foreground">
+                  <a href={explorerUrl(openTx.tx_hash || "")} target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /> Open explorer</a>
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
 
-function SocialChip({ href, label, icon }: { href: string; label: string; icon: React.ReactNode }) {
+function Stat({ label, value }: { label: string; value: string | number }) {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={label}
-      className="inline-flex items-center gap-1.5 rounded-lg glass px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-300"
-    >
-      {icon}
-      {label}
-    </a>
+    <div className="glass rounded-xl p-3">
+      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>
+      <div className="font-display text-xl font-bold mt-1">{value}</div>
+    </div>
   );
 }
 
-function GitHubIcon() {
+function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-      <path d="M9 18c-4.51 2-5-2-7-2" />
-    </svg>
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</span>
+      <span>{children}</span>
+    </div>
   );
 }
 
-function LinkedInIcon() {
+function VerifiedBadgeDialog({ profile, minted, verifiedCount }: { profile: Profile; minted: number; verifiedCount: number }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect width="4" height="12" x="2" y="9" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
+    <Dialog>
+      <DialogTrigger asChild>
+        <button aria-label="Verification info" className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-success/10 text-success border border-success/30 hover:bg-success/20 transition">
+          <BadgeCheck className="h-3.5 w-3.5" /> Verified
+        </button>
+      </DialogTrigger>
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-success" /> Verification</DialogTitle>
+          <DialogDescription>How this passport is trust-verified.</DialogDescription>
+        </DialogHeader>
+        <ul className="text-sm space-y-2 text-foreground/90">
+          <li className="flex items-start gap-2"><ShieldCheck className="h-4 w-4 text-success mt-0.5" /> {verifiedCount} credential{verifiedCount === 1 ? "" : "s"} hash-verified on Polygon.</li>
+          <li className="flex items-start gap-2"><Hexagon className="h-4 w-4 text-accent mt-0.5" /> {minted} NFT credential{minted === 1 ? "" : "s"} minted to the owner's wallet.</li>
+          {profile.wallet_address && <li className="flex items-start gap-2"><Wallet className="h-4 w-4 text-primary mt-0.5" /> Wallet ownership proven via signature.</li>}
+          <li className="flex items-start gap-2"><Award className="h-4 w-4 text-primary mt-0.5" /> Issuer signatures cross-checked at verification time.</li>
+        </ul>
+      </DialogContent>
+    </Dialog>
   );
 }
 
-function XIcon() {
+function ScoreBreakdownDialog({ score, minted, verifiedCount, skills, endorsements }: { score: number; minted: number; verifiedCount: number; skills: number; endorsements: number }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
-      <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
-    </svg>
+    <Dialog>
+      <DialogTrigger asChild>
+        <button aria-label="Reputation breakdown" className="shrink-0 hover:scale-105 transition-transform">
+          <ScoreRing value={score} size={120} />
+        </button>
+      </DialogTrigger>
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle>Reputation breakdown</DialogTitle>
+          <DialogDescription>Composite score recruiters trust.</DialogDescription>
+        </DialogHeader>
+        <div className="flex items-center justify-center py-3"><ScoreRing value={score} size={140} /></div>
+        <div className="space-y-2 text-sm">
+          <Row label="NFT credentials"><span>{minted} × 15 = <span className="text-accent font-semibold">{minted * 15}</span></span></Row>
+          <Row label="Verified hashes"><span>{verifiedCount} × 10 = <span className="text-success font-semibold">{verifiedCount * 10}</span></span></Row>
+          <Row label="Skills listed"><span>{skills} × 4 = <span className="text-primary font-semibold">{skills * 4}</span></span></Row>
+          <Row label="Endorsements"><span className="text-accent">★ {endorsements}</span></Row>
+          <div className="border-t border-border/50 pt-2 mt-2 flex justify-between">
+            <span className="text-xs uppercase tracking-wider text-muted-foreground">Total</span>
+            <span className="font-display font-bold">{score}/100</span>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
-function DiscordIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M9 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
-      <path d="M15 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
-      <path d="M7.5 5.5C4.5 6.5 3 9 3 9l3.5 2.5" />
-      <path d="M16.5 5.5c3 1 4.5 3.5 4.5 3.5l-3.5 2.5" />
-      <path d="M18 18c-1.5 1-3.5 1.5-6 1.5s-4.5-.5-6-1.5" />
-      <path d="M3 9v7.5a2.5 2.5 0 0 0 2.5 2.5h13a2.5 2.5 0 0 0 2.5-2.5V9" />
-    </svg>
-  );
+function groupBy<T>(arr: T[], key: (x: T) => string): Record<string, T[]> {
+  return arr.reduce((acc, x) => {
+    const k = key(x);
+    (acc[k] ||= []).push(x);
+    return acc;
+  }, {} as Record<string, T[]>);
+}
+
+function fmtDate(d: string) {
+  try { return new Date(d).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }); } catch { return d; }
 }
