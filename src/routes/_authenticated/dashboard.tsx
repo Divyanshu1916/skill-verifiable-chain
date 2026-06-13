@@ -98,15 +98,17 @@ function Dashboard() {
           ) : (
             <ul className="space-y-2">
               {recent.map((c) => (
-                <li key={c.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-card/40 px-4 py-3">
-                  <div className="min-w-0">
-                    <div className="font-medium truncate">{c.title}</div>
-                    <div className="text-xs text-muted-foreground truncate">{c.issuer}</div>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    {c.minted && <span className="text-[10px] font-mono px-2 py-1 rounded bg-accent/10 text-accent border border-accent/30">NFT</span>}
-                    {c.verified && <span className="text-[10px] font-mono px-2 py-1 rounded bg-success/10 text-success border border-success/30">VERIFIED</span>}
-                  </div>
+                <li key={c.id}>
+                  <Link to="/nft/$id" params={{ id: c.id }} className="flex items-center justify-between rounded-lg border border-border/60 bg-card/40 px-4 py-3 hover:border-primary/50 transition">
+                    <div className="min-w-0">
+                      <div className="font-medium truncate">{c.title}</div>
+                      <div className="text-xs text-muted-foreground truncate">{c.issuer}</div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {c.minted && <span className="text-[10px] font-mono px-2 py-1 rounded bg-accent/10 text-accent border border-accent/30">NFT</span>}
+                      {c.verified && <span className="text-[10px] font-mono px-2 py-1 rounded bg-success/10 text-success border border-success/30">VERIFIED</span>}
+                    </div>
+                  </Link>
                 </li>
               ))}
             </ul>
