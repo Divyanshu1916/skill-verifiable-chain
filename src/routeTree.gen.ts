@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ScanRouteImport } from './routes/scan'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as DemoRouteImport } from './routes/demo'
@@ -34,6 +35,11 @@ import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authen
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScanRoute = ScanRouteImport.update({
+  id: '/scan',
+  path: '/scan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -144,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRoute
   '/feedback': typeof FeedbackRoute
   '/login': typeof LoginRoute
+  '/scan': typeof ScanRoute
   '/signup': typeof SignupRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
@@ -166,6 +173,7 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRoute
   '/feedback': typeof FeedbackRoute
   '/login': typeof LoginRoute
+  '/scan': typeof ScanRoute
   '/signup': typeof SignupRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
@@ -190,6 +198,7 @@ export interface FileRoutesById {
   '/demo': typeof DemoRoute
   '/feedback': typeof FeedbackRoute
   '/login': typeof LoginRoute
+  '/scan': typeof ScanRoute
   '/signup': typeof SignupRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/certificates': typeof AuthenticatedCertificatesRoute
@@ -214,6 +223,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/feedback'
     | '/login'
+    | '/scan'
     | '/signup'
     | '/analytics'
     | '/certificates'
@@ -236,6 +246,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/feedback'
     | '/login'
+    | '/scan'
     | '/signup'
     | '/analytics'
     | '/certificates'
@@ -259,6 +270,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/feedback'
     | '/login'
+    | '/scan'
     | '/signup'
     | '/_authenticated/analytics'
     | '/_authenticated/certificates'
@@ -283,6 +295,7 @@ export interface RootRouteChildren {
   DemoRoute: typeof DemoRoute
   FeedbackRoute: typeof FeedbackRoute
   LoginRoute: typeof LoginRoute
+  ScanRoute: typeof ScanRoute
   SignupRoute: typeof SignupRoute
   PassportUsernameRoute: typeof PassportUsernameRoute
   VerifyCredentialIdRoute: typeof VerifyCredentialIdRoute
@@ -295,6 +308,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scan': {
+      id: '/scan'
+      path: '/scan'
+      fullPath: '/scan'
+      preLoaderRoute: typeof ScanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -489,6 +509,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRoute: DemoRoute,
   FeedbackRoute: FeedbackRoute,
   LoginRoute: LoginRoute,
+  ScanRoute: ScanRoute,
   SignupRoute: SignupRoute,
   PassportUsernameRoute: PassportUsernameRoute,
   VerifyCredentialIdRoute: VerifyCredentialIdRoute,
