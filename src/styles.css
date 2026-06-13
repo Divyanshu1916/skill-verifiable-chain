@@ -177,3 +177,79 @@
   .animate-orb-a, .animate-orb-b, .animate-orb-c,
   .animate-shape-spin, .animate-float, .animate-spin-slow { animation: none !important; }
 }
+
+/* Neon orange glowing border for step cards */
+@property --neon-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes neon-rotate {
+  to { --neon-angle: 360deg; }
+}
+.neon-card {
+  position: relative;
+  isolation: isolate;
+  background: oklch(0.13 0.025 40 / 0.55);
+  border: 1px solid oklch(0.7 0.18 50 / 0.35);
+  box-shadow:
+    0 0 0 1px oklch(0.75 0.18 55 / 0.15),
+    0 0 24px -4px oklch(0.7 0.2 50 / 0.35),
+    inset 0 0 30px oklch(0.7 0.2 50 / 0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+}
+.neon-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(from var(--neon-angle), transparent 0deg, oklch(0.85 0.22 55) 30deg, oklch(0.78 0.24 45) 60deg, transparent 110deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: neon-rotate 5s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+.neon-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 40px oklch(0.75 0.22 50 / 0.25), inset 0 0 20px oklch(0.8 0.22 50 / 0.06);
+  pointer-events: none;
+  opacity: 0.85;
+  transition: opacity 0.35s ease, box-shadow 0.35s ease;
+  z-index: 0;
+}
+.neon-card:hover {
+  transform: translateY(-6px);
+  background: oklch(0.16 0.03 40 / 0.7);
+  box-shadow:
+    0 0 0 1px oklch(0.8 0.2 55 / 0.4),
+    0 10px 50px -6px oklch(0.75 0.22 50 / 0.55),
+    inset 0 0 40px oklch(0.75 0.2 50 / 0.12);
+}
+.neon-card:hover::after {
+  opacity: 1;
+  box-shadow: 0 0 70px oklch(0.78 0.22 50 / 0.45), inset 0 0 30px oklch(0.85 0.22 50 / 0.12);
+}
+.neon-card > * { position: relative; z-index: 2; }
+.neon-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: oklch(0.85 0.22 55 / 0.9);
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px oklch(0.8 0.22 50 / 0.8));
+}
+.neon-corner.tl { top: 8px; left: 8px; border-top: 1.5px solid; border-left: 1.5px solid; }
+.neon-corner.tr { top: 8px; right: 8px; border-top: 1.5px solid; border-right: 1.5px solid; }
+.neon-corner.bl { bottom: 8px; left: 8px; border-bottom: 1.5px solid; border-left: 1.5px solid; }
+.neon-corner.br { bottom: 8px; right: 8px; border-bottom: 1.5px solid; border-right: 1.5px solid; }
+@media (prefers-reduced-motion: reduce) {
+  .neon-card::before { animation: none; }
+}
