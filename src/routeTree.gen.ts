@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ScanRouteImport } from './routes/scan'
+import { Route as RecruiterRouteImport } from './routes/recruiter'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as DemoRouteImport } from './routes/demo'
@@ -39,6 +40,11 @@ const SignupRoute = SignupRouteImport.update({
 const ScanRoute = ScanRouteImport.update({
   id: '/scan',
   path: '/scan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecruiterRoute = RecruiterRouteImport.update({
+  id: '/recruiter',
+  path: '/recruiter',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -144,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRoute
   '/feedback': typeof FeedbackRoute
   '/login': typeof LoginRoute
+  '/recruiter': typeof RecruiterRoute
   '/scan': typeof ScanRoute
   '/signup': typeof SignupRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
@@ -166,6 +173,7 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRoute
   '/feedback': typeof FeedbackRoute
   '/login': typeof LoginRoute
+  '/recruiter': typeof RecruiterRoute
   '/scan': typeof ScanRoute
   '/signup': typeof SignupRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
@@ -190,6 +198,7 @@ export interface FileRoutesById {
   '/demo': typeof DemoRoute
   '/feedback': typeof FeedbackRoute
   '/login': typeof LoginRoute
+  '/recruiter': typeof RecruiterRoute
   '/scan': typeof ScanRoute
   '/signup': typeof SignupRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
@@ -214,6 +223,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/feedback'
     | '/login'
+    | '/recruiter'
     | '/scan'
     | '/signup'
     | '/analytics'
@@ -236,6 +246,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/feedback'
     | '/login'
+    | '/recruiter'
     | '/scan'
     | '/signup'
     | '/analytics'
@@ -259,6 +270,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/feedback'
     | '/login'
+    | '/recruiter'
     | '/scan'
     | '/signup'
     | '/_authenticated/analytics'
@@ -283,6 +295,7 @@ export interface RootRouteChildren {
   DemoRoute: typeof DemoRoute
   FeedbackRoute: typeof FeedbackRoute
   LoginRoute: typeof LoginRoute
+  RecruiterRoute: typeof RecruiterRoute
   ScanRoute: typeof ScanRoute
   SignupRoute: typeof SignupRoute
   NftIdRoute: typeof NftIdRoute
@@ -304,6 +317,13 @@ declare module '@tanstack/react-router' {
       path: '/scan'
       fullPath: '/scan'
       preLoaderRoute: typeof ScanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recruiter': {
+      id: '/recruiter'
+      path: '/recruiter'
+      fullPath: '/recruiter'
+      preLoaderRoute: typeof RecruiterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -478,6 +498,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRoute: DemoRoute,
   FeedbackRoute: FeedbackRoute,
   LoginRoute: LoginRoute,
+  RecruiterRoute: RecruiterRoute,
   ScanRoute: ScanRoute,
   SignupRoute: SignupRoute,
   NftIdRoute: NftIdRoute,
