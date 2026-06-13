@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Sparkles, FileBadge, ShieldCheck, Hexagon, ArrowRight, ExternalLink, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { WalletCard } from "@/components/WalletCard";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
