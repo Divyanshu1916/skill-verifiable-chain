@@ -151,6 +151,23 @@ function CertsPage() {
                   <Button size="sm" variant="outline" disabled className="gap-2"><Hexagon className="h-4 w-4 text-accent" /> Minted</Button>
                 )}
               </div>
+
+              {/* QR Verification Card */}
+              {c.credential_id && (
+                <div className="mt-4 pt-4 border-t border-border/40">
+                  <CredentialQR
+                    credentialId={c.credential_id}
+                    title={c.title}
+                    issuer={c.issuer}
+                    candidateName={profileName}
+                    verified={c.verified}
+                    txHash={c.tx_hash}
+                    minted={c.minted}
+                    nftTokenId={c.nft_token_id}
+                    compact
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>
