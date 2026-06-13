@@ -348,6 +348,49 @@ function Field({ label, value, mono }: { label: string; value: string; mono?: bo
   );
 }
 
+function WalletFeatureCard({ icon: Icon, title, desc }: { icon: typeof Wallet; title: string; desc: string }) {
+  const { user } = useAuth();
+  const [addr, setAddr] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const handle = async () => {
+    if (!isMetaMaskInstalled()) {
+      window.open(METAMASK_INSTALL_URL, "_blank", "noopener,noreferrer");
+      toast.info("Install MetaMask to continue");
+      return;
+    }
+    setBusy(true);
+    try {
+      const a = await connectWallet();
+      setAddr(a);
+      if (user) await supabase.from("profiles").update({ wallet_address: a }).eq("id", user.id);
+      toast.success("Wallet connected", { description: shortAddress(a) });
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handle}
+      disabled={busy}
+      className="text-left glass rounded-2xl p-6 group hover:border-primary/40 transition-all hover:-translate-y-1 disabled:opacity-70"
+    >
+      <div className="h-11 w-11 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 grid place-items-center mb-4 group-hover:animate-pulse-glow">
+        <Icon className="h-5 w-5 text-primary" />
+      </div>
+      <h3 className="font-display font-semibold text-lg">{title}</h3>
+      <p className="text-sm text-muted-foreground mt-2">{desc}</p>
+      <div className="mt-4 text-xs text-primary inline-flex items-center gap-1">
+        {addr ? <>Connected · <span className="font-mono">{shortAddress(addr)}</span></> : busy ? "Connecting…" : !isMetaMaskInstalled() ? <>Install MetaMask <ArrowRight className="h-3 w-3" /></> : <>Connect wallet <ArrowRight className="h-3 w-3" /></>}
+      </div>
+    </button>
+  );
+}
+
 const features = [
   { icon: Sparkles, title: "Skill management", desc: "Add, level, and categorize your skills with endorsement scores.", to: "/skills" as const },
   { icon: FileBadge, title: "Certificate upload", desc: "Drop any PDF or image. We hash it client-side and anchor it on-chain.", to: "/certificates" as const },
