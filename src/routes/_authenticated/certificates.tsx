@@ -21,6 +21,7 @@ type Cred = {
   id: string; title: string; issuer: string; description: string | null;
   file_url: string | null; file_hash: string | null; tx_hash: string | null;
   nft_token_id: string | null; minted: boolean; verified: boolean; issued_at: string | null;
+  credential_id: string | null;
 };
 
 function CertsPage() {
