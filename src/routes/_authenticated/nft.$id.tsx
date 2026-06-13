@@ -100,16 +100,11 @@ function NFTDetail() {
 
             <div className="flex gap-2 flex-wrap">
               {c.credential_id && (
-                <>
-                  <Button asChild className="bg-gradient-to-r from-primary to-accent text-primary-foreground gap-2">
-                    <Link to="/verify/$credentialId" params={{ credentialId: c.credential_id }}>
-                      <ShieldCheck className="h-4 w-4" /> Verify NFT
-                    </Link>
-                  </Button>
-                  <Button asChild variant="outline" className="gap-2">
-                    <Link to="/qr" search={{ id: c.credential_id }}><QrCode className="h-4 w-4" /> Show QR</Link>
-                  </Button>
-                </>
+                <Button asChild className="bg-gradient-to-r from-primary to-accent text-primary-foreground gap-2">
+                  <Link to="/verify/$credentialId" params={{ credentialId: c.credential_id }}>
+                    <ShieldCheck className="h-4 w-4" /> Verify NFT
+                  </Link>
+                </Button>
               )}
               <Button
                 variant="outline"
@@ -147,6 +142,20 @@ function NFTDetail() {
                 <Download className="h-4 w-4" /> Download
               </Button>
             </div>
+
+            {/* QR Verification Card */}
+            {c.credential_id && (
+              <CredentialQR
+                credentialId={c.credential_id}
+                title={c.title}
+                issuer={c.issuer}
+                candidateName={owner?.full_name}
+                verified={c.verified}
+                txHash={c.tx_hash}
+                minted={c.minted}
+                nftTokenId={c.nft_token_id}
+              />
+            )}
           </div>
         </div>
       </div>
