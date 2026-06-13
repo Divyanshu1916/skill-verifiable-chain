@@ -218,12 +218,16 @@ function Landing() {
         </div>
         <div className="grid md:grid-cols-3 gap-5">
           {steps.map((s, i) => (
-            <Link key={s.title} to={s.to} className="glass rounded-2xl p-6 relative overflow-hidden hover:border-primary/40 hover:-translate-y-1 transition group block">
+            <Link key={s.title} to={s.to} className="neon-card rounded-2xl p-6 overflow-hidden group block">
+              <span className="neon-corner tl" />
+              <span className="neon-corner tr" />
+              <span className="neon-corner bl" />
+              <span className="neon-corner br" />
               <div className="absolute -top-4 -right-4 font-display text-8xl font-bold text-foreground/5">{i + 1}</div>
-              <s.icon className="h-6 w-6 text-primary mb-3" />
+              <s.icon className="h-6 w-6 mb-3" style={{ color: "oklch(0.82 0.2 55)", filter: "drop-shadow(0 0 8px oklch(0.8 0.22 50 / 0.7))" }} />
               <h3 className="font-display font-semibold text-lg">{s.title}</h3>
               <p className="text-sm text-muted-foreground mt-2">{s.desc}</p>
-              <div className="mt-4 text-xs text-primary inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">Open <ArrowRight className="h-3 w-3" /></div>
+              <div className="mt-4 text-xs inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 transition" style={{ color: "oklch(0.85 0.2 55)" }}>Open <ArrowRight className="h-3 w-3" /></div>
             </Link>
           ))}
 
