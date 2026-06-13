@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Upload, FileBadge, Hexagon, ExternalLink, Trash2, BadgeCheck, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { sha256File, fakeTxHash, explorerUrl } from "@/lib/web3";
+import { CredentialQR } from "@/components/CredentialQR";
 
 export const Route = createFileRoute("/_authenticated/certificates")({
   head: () => ({ meta: [{ title: "Certificates — SkillChain" }] }),
@@ -20,11 +21,13 @@ type Cred = {
   id: string; title: string; issuer: string; description: string | null;
   file_url: string | null; file_hash: string | null; tx_hash: string | null;
   nft_token_id: string | null; minted: boolean; verified: boolean; issued_at: string | null;
+  credential_id: string | null;
 };
 
 function CertsPage() {
   const { user } = useAuth();
   const [creds, setCreds] = useState<Cred[]>([]);
+  const [profileName, setProfileName] = useState<string | null>(null);
   const [title, setTitle] = useState(""); const [issuer, setIssuer] = useState("");
   const [issuedAt, setIssuedAt] = useState(""); const [desc, setDesc] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -33,8 +36,12 @@ function CertsPage() {
 
   const refresh = async () => {
     if (!user) return;
-    const { data } = await supabase.from("credentials").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
+    const [{ data }, { data: pf }] = await Promise.all([
+      supabase.from("credentials").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+      supabase.from("profiles").select("full_name").eq("id", user.id).maybeSingle(),
+    ]);
     setCreds((data as Cred[]) ?? []);
+    setProfileName(pf?.full_name ?? null);
   };
   useEffect(() => { refresh(); }, [user?.id]);
 
@@ -144,6 +151,23 @@ function CertsPage() {
                   <Button size="sm" variant="outline" disabled className="gap-2"><Hexagon className="h-4 w-4 text-accent" /> Minted</Button>
                 )}
               </div>
+
+              {/* QR Verification Card */}
+              {c.credential_id && (
+                <div className="mt-4 pt-4 border-t border-border/40">
+                  <CredentialQR
+                    credentialId={c.credential_id}
+                    title={c.title}
+                    issuer={c.issuer}
+                    candidateName={profileName}
+                    verified={c.verified}
+                    txHash={c.tx_hash}
+                    minted={c.minted}
+                    nftTokenId={c.nft_token_id}
+                    compact
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>

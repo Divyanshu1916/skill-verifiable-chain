@@ -5,10 +5,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { QRCodeSVG } from "qrcode.react";
 import { QrCode, ShieldCheck, ScanLine } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { CredentialQR } from "@/components/CredentialQR";
 
 const searchSchema = z.object({ id: z.string().optional() });
 
@@ -25,6 +25,16 @@ function QRPage() {
   const [creds, setCreds] = useState<{ id: string; credential_id: string | null; title: string }[]>([]);
   const [picked, setPicked] = useState<string | null>(id ?? null);
   const [scanInput, setScanInput] = useState("");
+  const [pickedDetail, setPickedDetail] = useState<{
+    credential_id: string;
+    title: string;
+    issuer: string;
+    verified: boolean;
+    tx_hash: string | null;
+    minted: boolean;
+    nft_token_id: string | null;
+    full_name: string | null;
+  } | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -35,7 +45,28 @@ function QRPage() {
     });
   }, [user?.id]);
 
-  const url = picked ? `${typeof window !== "undefined" ? window.location.origin : ""}/verify/${picked}` : "";
+  useEffect(() => {
+    if (!picked) { setPickedDetail(null); return; }
+    supabase
+      .from("credentials")
+      .select("credential_id,title,issuer,verified,tx_hash,minted,nft_token_id,user_id")
+      .eq("credential_id", picked)
+      .maybeSingle()
+      .then(async ({ data }) => {
+        if (!data) { setPickedDetail(null); return; }
+        const { data: pf } = await supabase.from("profiles").select("full_name").eq("id", data.user_id).maybeSingle();
+        setPickedDetail({
+          credential_id: data.credential_id || "",
+          title: data.title,
+          issuer: data.issuer,
+          verified: data.verified,
+          tx_hash: data.tx_hash,
+          minted: data.minted,
+          nft_token_id: data.nft_token_id,
+          full_name: pf?.full_name ?? null,
+        });
+      });
+  }, [picked]);
 
   const scan = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,17 +92,23 @@ function QRPage() {
             </select>
           </div>
 
-          {picked && (
-            <div className="mt-6 rounded-2xl bg-white p-6 grid place-items-center">
-              <QRCodeSVG value={url} size={220} bgColor="#ffffff" fgColor="#0a0a16" level="M" />
+          {pickedDetail && (
+            <div className="mt-6">
+              <CredentialQR
+                credentialId={pickedDetail.credential_id}
+                title={pickedDetail.title}
+                issuer={pickedDetail.issuer}
+                candidateName={pickedDetail.full_name}
+                verified={pickedDetail.verified}
+                txHash={pickedDetail.tx_hash}
+                minted={pickedDetail.minted}
+                nftTokenId={pickedDetail.nft_token_id}
+              />
             </div>
           )}
-          {picked && (
-            <div className="mt-4 flex gap-2">
-              <Button variant="outline" size="sm" className="gap-2 flex-1" onClick={() => { navigator.clipboard.writeText(url); toast.success("Link copied"); }}>Copy link</Button>
-              <Button asChild size="sm" className="gap-2 flex-1 bg-gradient-to-r from-primary to-accent text-primary-foreground">
-                <Link to="/verify/$credentialId" params={{ credentialId: picked }}><ShieldCheck className="h-4 w-4" /> Open</Link>
-              </Button>
+          {picked && !pickedDetail && (
+            <div className="mt-6 rounded-2xl bg-white p-6 grid place-items-center">
+              <div className="h-[200px] w-[200px] bg-muted animate-pulse rounded-xl" />
             </div>
           )}
           {creds.length === 0 && (
