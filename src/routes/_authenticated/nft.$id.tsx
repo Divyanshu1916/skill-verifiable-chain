@@ -110,6 +110,41 @@ function NFTDetail() {
                   </Button>
                 </>
               )}
+              <Button
+                variant="outline"
+                className="gap-2"
+                onClick={async () => {
+                  const url = window.location.href;
+                  const shareData = { title: `${c.title} — SkillChain NFT`, text: `${c.title} issued by ${c.issuer}`, url };
+                  try {
+                    if (navigator.share) await navigator.share(shareData);
+                    else { await navigator.clipboard.writeText(url); toast.success("Link copied to clipboard"); }
+                  } catch { /* user cancelled */ }
+                }}
+              >
+                <Share2 className="h-4 w-4" /> Share NFT
+              </Button>
+              <Button
+                variant="outline"
+                className="gap-2"
+                onClick={() => {
+                  const metadata = {
+                    name: c.title, issuer: c.issuer, description: c.description,
+                    token_id: c.nft_token_id, credential_id: c.credential_id,
+                    chain: c.chain ?? "polygon", tx_hash: c.tx_hash, file_hash: c.file_hash,
+                    issued_at: c.issued_at, verified: c.verified, owner: owner?.wallet_address ?? null,
+                  };
+                  const blob = new Blob([JSON.stringify(metadata, null, 2)], { type: "application/json" });
+                  const a = document.createElement("a");
+                  a.href = URL.createObjectURL(blob);
+                  a.download = `${(c.nft_token_id || c.credential_id || "credential").replace(/[^a-z0-9_-]/gi, "_")}.json`;
+                  a.click();
+                  URL.revokeObjectURL(a.href);
+                  toast.success("Credential downloaded");
+                }}
+              >
+                <Download className="h-4 w-4" /> Download
+              </Button>
             </div>
           </div>
         </div>
