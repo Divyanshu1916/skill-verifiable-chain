@@ -28,8 +28,13 @@ const recruiterNav = [
 export function AppShell({ children, title }: { children: ReactNode; title?: string }) {
   const { role, user, signOut } = useAuth();
   const nav = useNavigate();
+  const router = useRouter();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const items = role === "recruiter" ? recruiterNav : studentNav;
+  const goBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) router.history.back();
+    else nav({ to: "/dashboard" });
+  };
 
   return (
     <div className="min-h-screen flex w-full">
