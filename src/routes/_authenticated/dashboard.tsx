@@ -68,6 +68,9 @@ function Dashboard() {
           <Stat icon={ShieldCheck} label="Verified" value={creds.verified} accent />
         </div>
 
+        {/* Wallet */}
+        <WalletCard nftCount={creds.minted} />
+
         {/* Reputation */}
         <div className="glass rounded-2xl p-6">
           <div className="flex items-center justify-between mb-3">
