@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Upload, FileBadge, Hexagon, ExternalLink, Trash2, BadgeCheck, Loader2 } from "lucide-react";
+import { Upload, FileBadge, Hexagon, ExternalLink, Trash2, BadgeCheck, Loader2, QrCode } from "lucide-react";
 import { toast } from "sonner";
 import { sha256File, fakeTxHash, explorerUrl } from "@/lib/web3";
+import { CredentialQR } from "@/components/CredentialQR";
 
 export const Route = createFileRoute("/_authenticated/certificates")({
   head: () => ({ meta: [{ title: "Certificates — SkillChain" }] }),
