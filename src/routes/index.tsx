@@ -7,6 +7,11 @@ import {
   Shield, Sparkles, Zap, Wallet, BadgeCheck, ArrowRight,
   FileBadge, Search, QrCode, Hexagon, BarChart3, PlayCircle, Star, Globe,
 } from "lucide-react";
+import { connectWallet, isMetaMaskInstalled, METAMASK_INSTALL_URL, shortAddress } from "@/lib/web3";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth-context";
+import { toast } from "sonner";
+import { useState } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
