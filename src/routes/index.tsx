@@ -396,7 +396,7 @@ const features = [
   { icon: FileBadge, title: "Certificate upload", desc: "Drop any PDF or image. We hash it client-side and anchor it on-chain.", to: "/certificates" as const },
   { icon: Hexagon, title: "NFT credentials", desc: "Mint each verified credential as an NFT on Polygon — own it forever.", to: "/nft" as const },
   { icon: Wallet, title: "MetaMask wallet", desc: "Connect your wallet to claim ownership of your skill passport.", to: "/wallet" as const },
-  { icon: QrCode, title: "QR verification", desc: "Share a single QR. Recruiters verify instantly, no logins.", to: "/qr" as const },
+  { icon: QrCode, title: "QR verification", desc: "Share a single QR. Recruiters verify instantly, no logins.", to: "/scan" as const },
   { icon: BarChart3, title: "Reputation score", desc: "A composite signal recruiters trust — minted, verified, endorsed.", to: "/reputation" as const },
 ];
 
