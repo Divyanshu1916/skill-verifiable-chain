@@ -46,15 +46,25 @@ export function AuthPage({ mode }: { mode: "signin" | "signup" }) {
 
       {/* Form */}
       <div className="flex items-center justify-center p-6 md:p-12 relative">
-        <Link
-          to="/"
-          aria-label="Back to home"
-          className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full glass px-3 py-2 text-xs text-muted-foreground hover:text-foreground transition"
-        >
-          <ArrowLeft className="h-4 w-4" /> Back
-        </Link>
         <div className="w-full max-w-md">
-          <div className="lg:hidden mb-8"><Logo /></div>
+          <div className="lg:hidden mb-6 flex items-center justify-between gap-3">
+            <Logo />
+            <Link
+              to="/"
+              aria-label="Back to home"
+              className="inline-flex items-center gap-1.5 rounded-full glass px-3 py-2 text-xs text-muted-foreground hover:text-foreground transition"
+            >
+              <ArrowLeft className="h-4 w-4" /> Back
+            </Link>
+          </div>
+          <Link
+            to="/"
+            aria-label="Back to home"
+            className="hidden lg:inline-flex absolute top-4 left-4 items-center gap-1.5 rounded-full glass px-3 py-2 text-xs text-muted-foreground hover:text-foreground transition"
+          >
+            <ArrowLeft className="h-4 w-4" /> Back
+          </Link>
+
 
           {/* Tab switcher */}
           <div className="grid grid-cols-2 w-full glass rounded-lg p-1">
