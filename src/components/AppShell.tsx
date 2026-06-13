@@ -1,6 +1,6 @@
-import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate, useRouter } from "@tanstack/react-router";
 import { type ReactNode } from "react";
-import { LayoutDashboard, Sparkles, FileBadge, ShieldCheck, Search, LogOut, User as UserIcon, Hexagon, BarChart3, Wallet, QrCode, TrendingUp, MessageSquare } from "lucide-react";
+import { LayoutDashboard, Sparkles, FileBadge, ShieldCheck, Search, LogOut, User as UserIcon, Hexagon, BarChart3, Wallet, QrCode, TrendingUp, MessageSquare, ArrowLeft } from "lucide-react";
 import { Logo } from "./Logo";
 import { WalletButton } from "./WalletButton";
 import { useAuth } from "@/lib/auth-context";
