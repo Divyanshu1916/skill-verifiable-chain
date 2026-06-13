@@ -83,11 +83,16 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
 
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="h-16 border-b border-border/40 glass flex items-center justify-between px-4 md:px-8 sticky top-0 z-30">
-          <div className="md:hidden">
-            <Logo />
+        <header className="h-16 border-b border-border/40 glass flex items-center justify-between px-4 md:px-8 sticky top-0 z-30 gap-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <Button size="icon" variant="ghost" onClick={goBack} aria-label="Go back" className="h-9 w-9 shrink-0">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div className="md:hidden">
+              <Logo />
+            </div>
+            <h1 className="hidden md:block font-display text-xl font-semibold truncate">{title}</h1>
           </div>
-          <h1 className="hidden md:block font-display text-xl font-semibold">{title}</h1>
           <div className="flex items-center gap-2">
             <WalletButton compact />
           </div>
