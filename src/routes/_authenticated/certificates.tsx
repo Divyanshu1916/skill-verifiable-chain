@@ -53,12 +53,14 @@ function CertsPage() {
         file_url = path;
       }
       const tx_hash = fakeTxHash((file_hash ?? title) + user.id);
+      const nft_token_id = "#" + Math.floor(Math.random() * 999999).toString(16).padStart(6, "0").toUpperCase();
       const { error } = await supabase.from("credentials").insert({
         user_id: user.id, title, issuer, description: desc || null,
-        issued_at: issuedAt || null, file_url, file_hash, tx_hash, verified: true,
+        issued_at: issuedAt || null, file_url, file_hash, tx_hash,
+        verified: true, minted: true, nft_token_id,
       });
       if (error) throw error;
-      toast.success("Certificate anchored on-chain", { description: tx_hash.slice(0, 16) + "…" });
+      toast.success("Verified · NFT minted", { description: `Token ${nft_token_id} · ${tx_hash.slice(0, 12)}…` });
       setTitle(""); setIssuer(""); setDesc(""); setIssuedAt(""); setFile(null);
       if (fileRef.current) fileRef.current.value = "";
       refresh();
