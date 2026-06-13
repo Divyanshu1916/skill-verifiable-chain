@@ -98,6 +98,18 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
             <h1 className="hidden md:block font-display text-xl font-semibold truncate">{title}</h1>
           </div>
           <div className="flex items-center gap-2">
+            <Button
+              size="icon"
+              variant="ghost"
+              aria-label="Sign out"
+              className="h-9 w-9 text-muted-foreground"
+              onClick={async () => {
+                await signOut();
+                nav({ to: "/" });
+              }}
+            >
+              <LogOut className="h-5 w-5" />
+            </Button>
             <WalletButton compact />
           </div>
         </header>
