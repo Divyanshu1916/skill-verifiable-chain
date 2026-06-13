@@ -246,7 +246,7 @@ function Landing() {
                 <Link to="/recruiter">Open recruiter dashboard <ArrowRight className="h-4 w-4" /></Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="glass gap-2">
-                <Link to="/qr"><QrCode className="h-4 w-4" /> Try QR verification</Link>
+                <Link to="/scan"><QrCode className="h-4 w-4" /> Try QR verification</Link>
               </Button>
             </div>
           </div>
