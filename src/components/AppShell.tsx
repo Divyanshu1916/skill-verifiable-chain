@@ -32,8 +32,12 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const items = role === "recruiter" ? recruiterNav : studentNav;
   const goBack = () => {
+    if (pathname === "/dashboard" || pathname === "/recruiter") {
+      nav({ to: "/" });
+      return;
+    }
     if (typeof window !== "undefined" && window.history.length > 1) router.history.back();
-    else nav({ to: "/dashboard" });
+    else nav({ to: "/" });
   };
 
   return (
