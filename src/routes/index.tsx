@@ -52,7 +52,7 @@ function Landing() {
 
       {/* Hero */}
       <section className="relative px-3 sm:px-6 pt-6 md:pt-10">
-        <div className="relative max-w-7xl mx-auto rounded-[28px] border border-white/10 shadow-[0_30px_120px_-30px_oklch(0.5_0.22_295_/_0.55)] overflow-hidden">
+        <div className="beam-card relative max-w-7xl mx-auto rounded-[28px] border border-white/10 shadow-[0_30px_120px_-30px_oklch(0.5_0.22_295_/_0.55)] overflow-hidden">
           {/* Static premium background */}
           <div className="absolute inset-0 pointer-events-none" aria-hidden>
             <div
