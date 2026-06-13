@@ -218,13 +218,15 @@ function Landing() {
         </div>
         <div className="grid md:grid-cols-3 gap-5">
           {steps.map((s, i) => (
-            <div key={s.title} className="glass rounded-2xl p-6 relative overflow-hidden">
+            <Link key={s.title} to={s.to} className="glass rounded-2xl p-6 relative overflow-hidden hover:border-primary/40 hover:-translate-y-1 transition group block">
               <div className="absolute -top-4 -right-4 font-display text-8xl font-bold text-foreground/5">{i + 1}</div>
               <s.icon className="h-6 w-6 text-primary mb-3" />
               <h3 className="font-display font-semibold text-lg">{s.title}</h3>
               <p className="text-sm text-muted-foreground mt-2">{s.desc}</p>
-            </div>
+              <div className="mt-4 text-xs text-primary inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">Open <ArrowRight className="h-3 w-3" /></div>
+            </Link>
           ))}
+
         </div>
       </section>
 
@@ -401,9 +403,10 @@ const features = [
 ];
 
 const steps = [
-  { icon: Zap, title: "Sign up & connect", desc: "Create your passport, connect MetaMask in 30 seconds." },
-  { icon: FileBadge, title: "Upload credentials", desc: "Add skills and certificates. We hash & anchor each one." },
-  { icon: BadgeCheck, title: "Mint & share", desc: "Mint NFT badges and share a public, verifiable link." },
+  { icon: Zap, title: "Sign up & connect", desc: "Create your passport, connect MetaMask in 30 seconds.", to: "/signup" as const },
+  { icon: FileBadge, title: "Upload credentials", desc: "Add skills and certificates. We hash & anchor each one.", to: "/certificates" as const },
+  { icon: BadgeCheck, title: "Mint & share", desc: "Mint NFT badges and share a public, verifiable link.", to: "/nft" as const },
+
 ];
 
 const sampleNFTs = [
