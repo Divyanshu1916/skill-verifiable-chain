@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ScanRouteImport } from './routes/scan'
+import { Route as RecruiterRouteImport } from './routes/recruiter'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as DemoRouteImport } from './routes/demo'
@@ -19,17 +20,16 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VerifyCredentialIdRouteImport } from './routes/verify.$credentialId'
 import { Route as PassportUsernameRouteImport } from './routes/passport.$username'
+import { Route as NftIdRouteImport } from './routes/nft.$id'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
 import { Route as AuthenticatedVerifyRouteImport } from './routes/_authenticated/verify'
 import { Route as AuthenticatedSkillsRouteImport } from './routes/_authenticated/skills'
 import { Route as AuthenticatedReputationRouteImport } from './routes/_authenticated/reputation'
-import { Route as AuthenticatedRecruiterRouteImport } from './routes/_authenticated/recruiter'
 import { Route as AuthenticatedQrRouteImport } from './routes/_authenticated/qr'
 import { Route as AuthenticatedNftRouteImport } from './routes/_authenticated/nft'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authenticated/certificates'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
-import { Route as AuthenticatedNftIdRouteImport } from './routes/_authenticated/nft.$id'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated/admin.feedback'
 
 const SignupRoute = SignupRouteImport.update({
@@ -40,6 +40,11 @@ const SignupRoute = SignupRouteImport.update({
 const ScanRoute = ScanRouteImport.update({
   id: '/scan',
   path: '/scan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecruiterRoute = RecruiterRouteImport.update({
+  id: '/recruiter',
+  path: '/recruiter',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -81,6 +86,11 @@ const PassportUsernameRoute = PassportUsernameRouteImport.update({
   path: '/passport/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NftIdRoute = NftIdRouteImport.update({
+  id: '/nft/$id',
+  path: '/nft/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
   id: '/wallet',
   path: '/wallet',
@@ -99,11 +109,6 @@ const AuthenticatedSkillsRoute = AuthenticatedSkillsRouteImport.update({
 const AuthenticatedReputationRoute = AuthenticatedReputationRouteImport.update({
   id: '/reputation',
   path: '/reputation',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedRecruiterRoute = AuthenticatedRecruiterRouteImport.update({
-  id: '/recruiter',
-  path: '/recruiter',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedQrRoute = AuthenticatedQrRouteImport.update({
@@ -132,11 +137,6 @@ const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedNftIdRoute = AuthenticatedNftIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AuthenticatedNftRoute,
-} as any)
 const AuthenticatedAdminFeedbackRoute =
   AuthenticatedAdminFeedbackRouteImport.update({
     id: '/admin/feedback',
@@ -150,22 +150,22 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRoute
   '/feedback': typeof FeedbackRoute
   '/login': typeof LoginRoute
+  '/recruiter': typeof RecruiterRoute
   '/scan': typeof ScanRoute
   '/signup': typeof SignupRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/nft': typeof AuthenticatedNftRouteWithChildren
+  '/nft': typeof AuthenticatedNftRoute
   '/qr': typeof AuthenticatedQrRoute
-  '/recruiter': typeof AuthenticatedRecruiterRoute
   '/reputation': typeof AuthenticatedReputationRoute
   '/skills': typeof AuthenticatedSkillsRoute
   '/verify': typeof AuthenticatedVerifyRoute
   '/wallet': typeof AuthenticatedWalletRoute
+  '/nft/$id': typeof NftIdRoute
   '/passport/$username': typeof PassportUsernameRoute
   '/verify/$credentialId': typeof VerifyCredentialIdRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
-  '/nft/$id': typeof AuthenticatedNftIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -173,22 +173,22 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRoute
   '/feedback': typeof FeedbackRoute
   '/login': typeof LoginRoute
+  '/recruiter': typeof RecruiterRoute
   '/scan': typeof ScanRoute
   '/signup': typeof SignupRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/nft': typeof AuthenticatedNftRouteWithChildren
+  '/nft': typeof AuthenticatedNftRoute
   '/qr': typeof AuthenticatedQrRoute
-  '/recruiter': typeof AuthenticatedRecruiterRoute
   '/reputation': typeof AuthenticatedReputationRoute
   '/skills': typeof AuthenticatedSkillsRoute
   '/verify': typeof AuthenticatedVerifyRoute
   '/wallet': typeof AuthenticatedWalletRoute
+  '/nft/$id': typeof NftIdRoute
   '/passport/$username': typeof PassportUsernameRoute
   '/verify/$credentialId': typeof VerifyCredentialIdRoute
   '/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
-  '/nft/$id': typeof AuthenticatedNftIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -198,22 +198,22 @@ export interface FileRoutesById {
   '/demo': typeof DemoRoute
   '/feedback': typeof FeedbackRoute
   '/login': typeof LoginRoute
+  '/recruiter': typeof RecruiterRoute
   '/scan': typeof ScanRoute
   '/signup': typeof SignupRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/certificates': typeof AuthenticatedCertificatesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
-  '/_authenticated/nft': typeof AuthenticatedNftRouteWithChildren
+  '/_authenticated/nft': typeof AuthenticatedNftRoute
   '/_authenticated/qr': typeof AuthenticatedQrRoute
-  '/_authenticated/recruiter': typeof AuthenticatedRecruiterRoute
   '/_authenticated/reputation': typeof AuthenticatedReputationRoute
   '/_authenticated/skills': typeof AuthenticatedSkillsRoute
   '/_authenticated/verify': typeof AuthenticatedVerifyRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
+  '/nft/$id': typeof NftIdRoute
   '/passport/$username': typeof PassportUsernameRoute
   '/verify/$credentialId': typeof VerifyCredentialIdRoute
   '/_authenticated/admin/feedback': typeof AuthenticatedAdminFeedbackRoute
-  '/_authenticated/nft/$id': typeof AuthenticatedNftIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -223,6 +223,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/feedback'
     | '/login'
+    | '/recruiter'
     | '/scan'
     | '/signup'
     | '/analytics'
@@ -230,15 +231,14 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/nft'
     | '/qr'
-    | '/recruiter'
     | '/reputation'
     | '/skills'
     | '/verify'
     | '/wallet'
+    | '/nft/$id'
     | '/passport/$username'
     | '/verify/$credentialId'
     | '/admin/feedback'
-    | '/nft/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -246,6 +246,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/feedback'
     | '/login'
+    | '/recruiter'
     | '/scan'
     | '/signup'
     | '/analytics'
@@ -253,15 +254,14 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/nft'
     | '/qr'
-    | '/recruiter'
     | '/reputation'
     | '/skills'
     | '/verify'
     | '/wallet'
+    | '/nft/$id'
     | '/passport/$username'
     | '/verify/$credentialId'
     | '/admin/feedback'
-    | '/nft/$id'
   id:
     | '__root__'
     | '/'
@@ -270,6 +270,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/feedback'
     | '/login'
+    | '/recruiter'
     | '/scan'
     | '/signup'
     | '/_authenticated/analytics'
@@ -277,15 +278,14 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/nft'
     | '/_authenticated/qr'
-    | '/_authenticated/recruiter'
     | '/_authenticated/reputation'
     | '/_authenticated/skills'
     | '/_authenticated/verify'
     | '/_authenticated/wallet'
+    | '/nft/$id'
     | '/passport/$username'
     | '/verify/$credentialId'
     | '/_authenticated/admin/feedback'
-    | '/_authenticated/nft/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -295,8 +295,10 @@ export interface RootRouteChildren {
   DemoRoute: typeof DemoRoute
   FeedbackRoute: typeof FeedbackRoute
   LoginRoute: typeof LoginRoute
+  RecruiterRoute: typeof RecruiterRoute
   ScanRoute: typeof ScanRoute
   SignupRoute: typeof SignupRoute
+  NftIdRoute: typeof NftIdRoute
   PassportUsernameRoute: typeof PassportUsernameRoute
   VerifyCredentialIdRoute: typeof VerifyCredentialIdRoute
 }
@@ -315,6 +317,13 @@ declare module '@tanstack/react-router' {
       path: '/scan'
       fullPath: '/scan'
       preLoaderRoute: typeof ScanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recruiter': {
+      id: '/recruiter'
+      path: '/recruiter'
+      fullPath: '/recruiter'
+      preLoaderRoute: typeof RecruiterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -373,6 +382,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PassportUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nft/$id': {
+      id: '/nft/$id'
+      path: '/nft/$id'
+      fullPath: '/nft/$id'
+      preLoaderRoute: typeof NftIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/wallet': {
       id: '/_authenticated/wallet'
       path: '/wallet'
@@ -399,13 +415,6 @@ declare module '@tanstack/react-router' {
       path: '/reputation'
       fullPath: '/reputation'
       preLoaderRoute: typeof AuthenticatedReputationRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/recruiter': {
-      id: '/_authenticated/recruiter'
-      path: '/recruiter'
-      fullPath: '/recruiter'
-      preLoaderRoute: typeof AuthenticatedRecruiterRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/qr': {
@@ -443,13 +452,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAnalyticsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/nft/$id': {
-      id: '/_authenticated/nft/$id'
-      path: '/$id'
-      fullPath: '/nft/$id'
-      preLoaderRoute: typeof AuthenticatedNftIdRouteImport
-      parentRoute: typeof AuthenticatedNftRoute
-    }
     '/_authenticated/admin/feedback': {
       id: '/_authenticated/admin/feedback'
       path: '/admin/feedback'
@@ -460,24 +462,12 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthenticatedNftRouteChildren {
-  AuthenticatedNftIdRoute: typeof AuthenticatedNftIdRoute
-}
-
-const AuthenticatedNftRouteChildren: AuthenticatedNftRouteChildren = {
-  AuthenticatedNftIdRoute: AuthenticatedNftIdRoute,
-}
-
-const AuthenticatedNftRouteWithChildren =
-  AuthenticatedNftRoute._addFileChildren(AuthenticatedNftRouteChildren)
-
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedCertificatesRoute: typeof AuthenticatedCertificatesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedNftRoute: typeof AuthenticatedNftRouteWithChildren
+  AuthenticatedNftRoute: typeof AuthenticatedNftRoute
   AuthenticatedQrRoute: typeof AuthenticatedQrRoute
-  AuthenticatedRecruiterRoute: typeof AuthenticatedRecruiterRoute
   AuthenticatedReputationRoute: typeof AuthenticatedReputationRoute
   AuthenticatedSkillsRoute: typeof AuthenticatedSkillsRoute
   AuthenticatedVerifyRoute: typeof AuthenticatedVerifyRoute
@@ -489,9 +479,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedCertificatesRoute: AuthenticatedCertificatesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedNftRoute: AuthenticatedNftRouteWithChildren,
+  AuthenticatedNftRoute: AuthenticatedNftRoute,
   AuthenticatedQrRoute: AuthenticatedQrRoute,
-  AuthenticatedRecruiterRoute: AuthenticatedRecruiterRoute,
   AuthenticatedReputationRoute: AuthenticatedReputationRoute,
   AuthenticatedSkillsRoute: AuthenticatedSkillsRoute,
   AuthenticatedVerifyRoute: AuthenticatedVerifyRoute,
@@ -509,8 +498,10 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRoute: DemoRoute,
   FeedbackRoute: FeedbackRoute,
   LoginRoute: LoginRoute,
+  RecruiterRoute: RecruiterRoute,
   ScanRoute: ScanRoute,
   SignupRoute: SignupRoute,
+  NftIdRoute: NftIdRoute,
   PassportUsernameRoute: PassportUsernameRoute,
   VerifyCredentialIdRoute: VerifyCredentialIdRoute,
 }

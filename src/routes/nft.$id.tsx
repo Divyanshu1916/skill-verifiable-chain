@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { AppShell } from "@/components/AppShell";
+import { PublicShell } from "@/components/PublicShell";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Hexagon, BadgeCheck, ExternalLink, Copy, ArrowLeft, ShieldCheck, Share2, Download } from "lucide-react";
@@ -8,8 +8,11 @@ import { explorerUrl, shortAddress } from "@/lib/web3";
 import { toast } from "sonner";
 import { CredentialQR } from "@/components/CredentialQR";
 
-export const Route = createFileRoute("/_authenticated/nft/$id")({
-  head: () => ({ meta: [{ title: "NFT Detail — SkillChain" }] }),
+export const Route = createFileRoute("/nft/$id")({
+  head: () => ({ meta: [
+    { title: "NFT Credential — SkillChain" },
+    { name: "description", content: "View an on-chain verified skill credential NFT." },
+  ] }),
   component: NFTDetail,
 });
 
@@ -21,7 +24,7 @@ type Cred = {
 };
 
 function NFTDetail() {
-  const { id } = useParams({ from: "/_authenticated/nft/$id" });
+  const { id } = useParams({ from: "/nft/$id" });
   const [c, setC] = useState<Cred | null>(null);
   const [owner, setOwner] = useState<{ username: string | null; wallet_address: string | null; full_name: string | null } | null>(null);
 
@@ -35,18 +38,17 @@ function NFTDetail() {
     });
   }, [id]);
 
-  if (!c) return <AppShell title="NFT"><div className="glass rounded-2xl p-12 text-center text-muted-foreground">Loading…</div></AppShell>;
+  if (!c) return <PublicShell title="NFT"><div className="glass rounded-2xl p-12 text-center text-muted-foreground max-w-3xl mx-auto">Loading…</div></PublicShell>;
 
   const copy = (s: string) => { navigator.clipboard.writeText(s); toast.success("Copied"); };
   const hue = (c.title.charCodeAt(0) % 12) * 25;
 
   return (
-    <AppShell title="NFT Detail">
-      <div className="max-w-5xl space-y-6">
-        <Button asChild variant="ghost" size="sm" className="gap-2"><Link to="/nft"><ArrowLeft className="h-4 w-4" /> Back to gallery</Link></Button>
+    <PublicShell title="NFT Credential">
+      <div className="max-w-5xl mx-auto space-y-6">
+        <Button asChild variant="ghost" size="sm" className="gap-2"><Link to="/">{<ArrowLeft className="h-4 w-4" />} Back</Link></Button>
 
         <div className="grid lg:grid-cols-5 gap-6">
-          {/* Visual */}
           <div className="lg:col-span-2">
             <div className="glass-strong rounded-2xl p-5">
               <div className="relative aspect-square rounded-xl overflow-hidden" style={{ background: `linear-gradient(135deg, oklch(0.55 0.2 ${195 + hue}), oklch(0.5 0.22 ${305 + hue}))` }}>
@@ -58,7 +60,6 @@ function NFTDetail() {
             </div>
           </div>
 
-          {/* Metadata */}
           <div className="lg:col-span-3 space-y-4">
             <div className="glass rounded-2xl p-6">
               <div className="text-xs uppercase tracking-wider text-muted-foreground">Credential NFT</div>
@@ -74,13 +75,7 @@ function NFTDetail() {
               <Row label="Chain" value={(c.chain ?? "polygon").toUpperCase()} />
               <Row label="Issued on" value={c.issued_at ?? "—"} />
               <Row label="File hash (SHA-256)" value={c.file_hash ? c.file_hash.slice(0, 22) + "…" : "—"} mono onCopy={() => c.file_hash && copy(c.file_hash)} />
-              <Row
-                label="Transaction"
-                value={c.tx_hash ? shortAddress(c.tx_hash) : "—"}
-                mono
-                href={c.tx_hash ? explorerUrl(c.tx_hash) : undefined}
-                onCopy={() => c.tx_hash && copy(c.tx_hash)}
-              />
+              <Row label="Transaction" value={c.tx_hash ? shortAddress(c.tx_hash) : "—"} mono href={c.tx_hash ? explorerUrl(c.tx_hash) : undefined} onCopy={() => c.tx_hash && copy(c.tx_hash)} />
             </div>
 
             <div className="glass rounded-2xl p-6">
@@ -106,60 +101,26 @@ function NFTDetail() {
                   </Link>
                 </Button>
               )}
-              <Button
-                variant="outline"
-                className="gap-2"
-                onClick={async () => {
-                  const url = window.location.href;
-                  const shareData = { title: `${c.title} — SkillChain NFT`, text: `${c.title} issued by ${c.issuer}`, url };
-                  try {
-                    if (navigator.share) await navigator.share(shareData);
-                    else { await navigator.clipboard.writeText(url); toast.success("Link copied to clipboard"); }
-                  } catch { /* user cancelled */ }
-                }}
-              >
-                <Share2 className="h-4 w-4" /> Share NFT
-              </Button>
-              <Button
-                variant="outline"
-                className="gap-2"
-                onClick={() => {
-                  const metadata = {
-                    name: c.title, issuer: c.issuer, description: c.description,
-                    token_id: c.nft_token_id, credential_id: c.credential_id,
-                    chain: c.chain ?? "polygon", tx_hash: c.tx_hash, file_hash: c.file_hash,
-                    issued_at: c.issued_at, verified: c.verified, owner: owner?.wallet_address ?? null,
-                  };
-                  const blob = new Blob([JSON.stringify(metadata, null, 2)], { type: "application/json" });
-                  const a = document.createElement("a");
-                  a.href = URL.createObjectURL(blob);
-                  a.download = `${(c.nft_token_id || c.credential_id || "credential").replace(/[^a-z0-9_-]/gi, "_")}.json`;
-                  a.click();
-                  URL.revokeObjectURL(a.href);
-                  toast.success("Credential downloaded");
-                }}
-              >
-                <Download className="h-4 w-4" /> Download
-              </Button>
+              <Button variant="outline" className="gap-2" onClick={async () => {
+                const url = window.location.href;
+                const shareData = { title: `${c.title} — SkillChain NFT`, text: `${c.title} issued by ${c.issuer}`, url };
+                try { if (navigator.share) await navigator.share(shareData); else { await navigator.clipboard.writeText(url); toast.success("Link copied to clipboard"); } } catch {}
+              }}><Share2 className="h-4 w-4" /> Share NFT</Button>
+              <Button variant="outline" className="gap-2" onClick={() => {
+                const metadata = { name: c.title, issuer: c.issuer, description: c.description, token_id: c.nft_token_id, credential_id: c.credential_id, chain: c.chain ?? "polygon", tx_hash: c.tx_hash, file_hash: c.file_hash, issued_at: c.issued_at, verified: c.verified, owner: owner?.wallet_address ?? null };
+                const blob = new Blob([JSON.stringify(metadata, null, 2)], { type: "application/json" });
+                const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `${(c.nft_token_id || c.credential_id || "credential").replace(/[^a-z0-9_-]/gi, "_")}.json`; a.click(); URL.revokeObjectURL(a.href);
+                toast.success("Credential downloaded");
+              }}><Download className="h-4 w-4" /> Download</Button>
             </div>
 
-            {/* QR Verification Card */}
             {c.credential_id && (
-              <CredentialQR
-                credentialId={c.credential_id}
-                title={c.title}
-                issuer={c.issuer}
-                candidateName={owner?.full_name}
-                verified={c.verified}
-                txHash={c.tx_hash}
-                minted={c.minted}
-                nftTokenId={c.nft_token_id}
-              />
+              <CredentialQR credentialId={c.credential_id} title={c.title} issuer={c.issuer} candidateName={owner?.full_name} verified={c.verified} txHash={c.tx_hash} minted={c.minted} nftTokenId={c.nft_token_id} />
             )}
           </div>
         </div>
       </div>
-    </AppShell>
+    </PublicShell>
   );
 }
 

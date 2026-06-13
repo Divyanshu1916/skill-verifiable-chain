@@ -1,14 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { AppShell } from "@/components/AppShell";
+import { PublicShell } from "@/components/PublicShell";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, ExternalLink, Hexagon, BadgeCheck, Download, History, FileText } from "lucide-react";
+import { Search, ExternalLink, Hexagon, BadgeCheck, Download, History, FileText, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/recruiter")({
-  head: () => ({ meta: [{ title: "Recruiter — SkillChain" }] }),
+export const Route = createFileRoute("/recruiter")({
+  head: () => ({ meta: [
+    { title: "Recruiter Verification Portal — SkillChain" },
+    { name: "description", content: "Search and verify on-chain professional credentials. No account required." },
+  ] }),
   component: Recruiter,
 });
 
@@ -38,7 +41,7 @@ function Recruiter() {
     return () => clearTimeout(t);
   }, [q]);
 
-  const verify = async (p: Profile) => {
+  const verify = (p: Profile) => {
     if (!p.username) return;
     const item: HistoryItem = { username: p.username, name: p.full_name || p.username, at: new Date().toISOString(), score: p.reputation_score };
     const next = [item, ...history.filter((h) => h.username !== p.username)].slice(0, 20);
@@ -73,12 +76,13 @@ function Recruiter() {
   };
 
   return (
-    <AppShell title="Recruiter search">
-      <div className="max-w-7xl grid lg:grid-cols-[1fr,320px] gap-6">
+    <PublicShell title="Recruiter portal">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr,320px] gap-6">
         <div className="space-y-6">
           <div className="glass rounded-2xl p-6">
-            <h2 className="font-display text-2xl font-bold">Find verified talent</h2>
-            <p className="text-sm text-muted-foreground mt-1">Every candidate's credentials are on-chain. Search and verify in one click.</p>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground"><ShieldCheck className="h-3 w-3 text-success" /> Public verification · no account required</div>
+            <h2 className="font-display text-2xl font-bold mt-2">Find verified talent</h2>
+            <p className="text-sm text-muted-foreground mt-1">Every candidate's credentials are anchored on-chain. Search, view passports, and download signed reports.</p>
             <div className="relative mt-5">
               <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by name, username, role…" className="pl-9 h-11" />
@@ -113,7 +117,6 @@ function Recruiter() {
           </div>
         </div>
 
-        {/* History sidebar */}
         <aside className="glass rounded-2xl p-5 h-fit lg:sticky lg:top-24">
           <h3 className="font-display font-semibold flex items-center gap-2"><History className="h-4 w-4 text-primary" /> Verification history</h3>
           {history.length === 0 ? (
@@ -133,6 +136,6 @@ function Recruiter() {
           )}
         </aside>
       </div>
-    </AppShell>
+    </PublicShell>
   );
 }
