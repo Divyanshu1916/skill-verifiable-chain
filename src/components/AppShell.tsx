@@ -1,6 +1,6 @@
-import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate, useRouter } from "@tanstack/react-router";
 import { type ReactNode } from "react";
-import { LayoutDashboard, Sparkles, FileBadge, ShieldCheck, Search, LogOut, User as UserIcon, Hexagon, BarChart3, Wallet, QrCode, TrendingUp, MessageSquare } from "lucide-react";
+import { LayoutDashboard, Sparkles, FileBadge, ShieldCheck, Search, LogOut, User as UserIcon, Hexagon, BarChart3, Wallet, QrCode, TrendingUp, MessageSquare, ArrowLeft } from "lucide-react";
 import { Logo } from "./Logo";
 import { WalletButton } from "./WalletButton";
 import { useAuth } from "@/lib/auth-context";
@@ -28,8 +28,13 @@ const recruiterNav = [
 export function AppShell({ children, title }: { children: ReactNode; title?: string }) {
   const { role, user, signOut } = useAuth();
   const nav = useNavigate();
+  const router = useRouter();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const items = role === "recruiter" ? recruiterNav : studentNav;
+  const goBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) router.history.back();
+    else nav({ to: "/dashboard" });
+  };
 
   return (
     <div className="min-h-screen flex w-full">
@@ -78,11 +83,16 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
 
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="h-16 border-b border-border/40 glass flex items-center justify-between px-4 md:px-8 sticky top-0 z-30">
-          <div className="md:hidden">
-            <Logo />
+        <header className="h-16 border-b border-border/40 glass flex items-center justify-between px-4 md:px-8 sticky top-0 z-30 gap-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <Button size="icon" variant="ghost" onClick={goBack} aria-label="Go back" className="h-9 w-9 shrink-0">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div className="md:hidden">
+              <Logo />
+            </div>
+            <h1 className="hidden md:block font-display text-xl font-semibold truncate">{title}</h1>
           </div>
-          <h1 className="hidden md:block font-display text-xl font-semibold">{title}</h1>
           <div className="flex items-center gap-2">
             <WalletButton compact />
           </div>
