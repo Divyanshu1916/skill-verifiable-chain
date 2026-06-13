@@ -401,9 +401,10 @@ const features = [
 ];
 
 const steps = [
-  { icon: Zap, title: "Sign up & connect", desc: "Create your passport, connect MetaMask in 30 seconds." },
-  { icon: FileBadge, title: "Upload credentials", desc: "Add skills and certificates. We hash & anchor each one." },
-  { icon: BadgeCheck, title: "Mint & share", desc: "Mint NFT badges and share a public, verifiable link." },
+  { icon: Zap, title: "Sign up & connect", desc: "Create your passport, connect MetaMask in 30 seconds.", to: "/signup" as const },
+  { icon: FileBadge, title: "Upload credentials", desc: "Add skills and certificates. We hash & anchor each one.", to: "/certificates" as const },
+  { icon: BadgeCheck, title: "Mint & share", desc: "Mint NFT badges and share a public, verifiable link.", to: "/nft" as const },
+
 ];
 
 const sampleNFTs = [
