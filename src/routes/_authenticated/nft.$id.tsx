@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Hexagon, BadgeCheck, ExternalLink, Copy, ArrowLeft, ShieldCheck, QrCode } from "lucide-react";
+import { Hexagon, BadgeCheck, ExternalLink, Copy, ArrowLeft, ShieldCheck, QrCode, Share2, Download } from "lucide-react";
 import { explorerUrl, shortAddress } from "@/lib/web3";
 import { toast } from "sonner";
 
