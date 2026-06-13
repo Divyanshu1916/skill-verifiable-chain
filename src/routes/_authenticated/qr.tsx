@@ -5,10 +5,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { QRCodeSVG } from "qrcode.react";
 import { QrCode, ShieldCheck, ScanLine } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { CredentialQR } from "@/components/CredentialQR";
 
 const searchSchema = z.object({ id: z.string().optional() });
 
