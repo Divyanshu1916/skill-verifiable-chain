@@ -56,7 +56,7 @@ function QRPage() {
         if (!data) { setPickedDetail(null); return; }
         const { data: pf } = await supabase.from("profiles").select("full_name").eq("id", data.user_id).maybeSingle();
         setPickedDetail({
-          credential_id: data.credential_id,
+          credential_id: data.credential_id || "",
           title: data.title,
           issuer: data.issuer,
           verified: data.verified,
