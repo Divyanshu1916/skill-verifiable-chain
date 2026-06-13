@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Sparkles, FileBadge, ShieldCheck, Hexagon, ArrowRight, ExternalLink, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { WalletCard } from "@/components/WalletCard";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -66,6 +67,9 @@ function Dashboard() {
           <Stat icon={Hexagon} label="Minted NFTs" value={creds.minted} accent />
           <Stat icon={ShieldCheck} label="Verified" value={creds.verified} accent />
         </div>
+
+        {/* Wallet */}
+        <WalletCard nftCount={creds.minted} />
 
         {/* Reputation */}
         <div className="glass rounded-2xl p-6">
