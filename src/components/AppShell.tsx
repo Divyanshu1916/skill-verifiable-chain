@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth-context";
 import { Button } from "./ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { NotificationBell } from "./NotificationBell";
+import { UserMenu } from "./UserMenu";
 
 const studentNav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -102,19 +103,8 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
           <div className="flex items-center gap-2">
             <NotificationBell />
             <ThemeToggle />
-            <Button
-              size="icon"
-              variant="ghost"
-              aria-label="Sign out"
-              className="h-9 w-9 text-muted-foreground"
-              onClick={async () => {
-                await signOut();
-                nav({ to: "/" });
-              }}
-            >
-              <LogOut className="h-5 w-5" />
-            </Button>
             <WalletButton compact />
+            <UserMenu />
           </div>
         </header>
 

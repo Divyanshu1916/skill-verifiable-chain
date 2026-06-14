@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { WalletButton } from "@/components/WalletButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { NotificationBell } from "@/components/NotificationBell";
+import { UserMenu } from "@/components/UserMenu";
 import {
   Shield, Sparkles, Zap, Wallet, BadgeCheck, ArrowRight,
   FileBadge, Search, QrCode, Hexagon, BarChart3, PlayCircle, Star, Globe,
@@ -28,6 +29,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Landing() {
+  const { user } = useAuth();
   return (
     <div className="min-h-screen relative">
 
@@ -46,10 +48,16 @@ function Landing() {
             <NotificationBell />
             <ThemeToggle />
             <div className="hidden sm:block"><WalletButton compact /></div>
-            <Button asChild variant="ghost" size="sm"><Link to="/login">Sign in</Link></Button>
-            <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
-              <Link to="/signup">Get started</Link>
-            </Button>
+            {user ? (
+              <UserMenu />
+            ) : (
+              <>
+                <Button asChild variant="ghost" size="sm"><Link to="/login">Sign in</Link></Button>
+                <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
+                  <Link to="/signup">Get started</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </header>
