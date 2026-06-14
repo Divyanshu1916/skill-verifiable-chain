@@ -3,6 +3,7 @@ import { Logo } from "@/components/Logo";
 import { GradientOrb } from "@/components/GradientOrb";
 import { Button } from "@/components/ui/button";
 import { WalletButton } from "@/components/WalletButton";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   Shield, Sparkles, Zap, Wallet, BadgeCheck, ArrowRight,
   FileBadge, Search, QrCode, Hexagon, BarChart3, PlayCircle, Star, Globe,
