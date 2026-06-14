@@ -6,6 +6,7 @@ import { WalletButton } from "./WalletButton";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "./ui/button";
 import { ThemeToggle } from "./ThemeToggle";
+import { NotificationBell } from "./NotificationBell";
 
 const studentNav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -99,6 +100,7 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
             <h1 className="hidden md:block font-display text-xl font-semibold truncate">{title}</h1>
           </div>
           <div className="flex items-center gap-2">
+            <NotificationBell />
             <ThemeToggle />
             <Button
               size="icon"
