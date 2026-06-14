@@ -1,10 +1,11 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import {
   BadgeCheck, Hexagon, ExternalLink, Sparkles, MapPin, ShieldCheck, Copy,
   Share2, Download, QrCode, Linkedin, Clock, Wallet, Award, ChevronRight,
+  ArrowLeft,
 } from "lucide-react";
 import { explorerUrl, shortAddress } from "@/lib/web3";
 import { toast } from "sonner";
