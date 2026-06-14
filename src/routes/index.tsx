@@ -4,6 +4,7 @@ import { GradientOrb } from "@/components/GradientOrb";
 import { Button } from "@/components/ui/button";
 import { WalletButton } from "@/components/WalletButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { NotificationBell } from "@/components/NotificationBell";
 import {
   Shield, Sparkles, Zap, Wallet, BadgeCheck, ArrowRight,
   FileBadge, Search, QrCode, Hexagon, BarChart3, PlayCircle, Star, Globe,
@@ -42,6 +43,7 @@ function Landing() {
             <Link to="/feedback" className="hover:text-foreground transition">Feedback</Link>
           </nav>
           <div className="flex items-center gap-2 shrink-0">
+            <NotificationBell />
             <ThemeToggle />
             <div className="hidden sm:block"><WalletButton compact /></div>
             <Button asChild variant="ghost" size="sm"><Link to="/login">Sign in</Link></Button>
