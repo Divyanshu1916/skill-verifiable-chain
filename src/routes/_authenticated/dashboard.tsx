@@ -42,6 +42,7 @@ function Dashboard() {
 
   return (
     <AppShell title="Dashboard">
+      <WelcomeOverlay />
       <div className="space-y-6 max-w-6xl">
         {/* Greeting */}
         <div className="glass rounded-2xl p-6 md:p-8 relative overflow-hidden">
