@@ -159,7 +159,7 @@ export function WelcomeCelebration({ userName, onContinue, autoNavigateMs = 5000
         >
           <Sparkles className="h-4 w-4" style={{ color: "#FFD700" }} />
           <span className="text-xs font-medium tracking-wider uppercase" style={{ color: "#FFEFB0" }}>
-            Welcome aboard
+            {variant === "returning" ? "Welcome back" : "Welcome aboard"}
           </span>
         </motion.div>
 
