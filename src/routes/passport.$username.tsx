@@ -50,6 +50,7 @@ export const Route = createFileRoute("/passport/$username")({
 });
 
 function Passport() {
+  const navigate = useNavigate();
   const { profile, skills, credentials } = Route.useLoaderData() as {
     profile: Profile; skills: Skill[]; credentials: Cred[];
   };
