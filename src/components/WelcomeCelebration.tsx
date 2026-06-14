@@ -176,9 +176,11 @@ export function WelcomeCelebration({ userName, onContinue, autoNavigateMs = 5000
             textShadow: "0 0 40px rgba(255,215,0,0.4)",
           }}
         >
-          🎉 Welcome to SkillChain,
-          <br />
-          {userName}!
+          {variant === "returning" ? (
+            <>👋 Welcome Back,<br />{userName}!</>
+          ) : (
+            <>🎉 Welcome to SkillChain,<br />{userName}!</>
+          )}
         </motion.h1>
 
         <motion.p
