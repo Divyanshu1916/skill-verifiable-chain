@@ -10,6 +10,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { Sparkles } from "lucide-react";
+import { triggerWelcome } from "@/components/WelcomeOverlay";
 
 export function AuthPage({ mode }: { mode: "signin" | "signup" }) {
   const nav = useNavigate();
