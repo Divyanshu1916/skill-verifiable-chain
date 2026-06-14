@@ -10,6 +10,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { Sparkles } from "lucide-react";
+import { triggerWelcome } from "@/components/WelcomeOverlay";
 
 export function AuthPage({ mode }: { mode: "signin" | "signup" }) {
   const nav = useNavigate();
@@ -91,7 +92,8 @@ export function AuthPage({ mode }: { mode: "signin" | "signup" }) {
 
 function GoogleButton() {
   const onClick = async () => {
-    const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/welcome" });
+    triggerWelcome();
+    const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
     if (res.error) toast.error("Google sign-in failed");
   };
   return (
@@ -111,7 +113,8 @@ function SignInForm() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back");
-    nav({ to: "/welcome" });
+    triggerWelcome();
+    nav({ to: "/dashboard" });
   };
   return (
     <form onSubmit={submit} className="mt-6 glass rounded-2xl p-6 space-y-4">
@@ -150,7 +153,8 @@ function SignUpForm() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Account created");
-    nav({ to: "/welcome" });
+    triggerWelcome();
+    nav({ to: "/dashboard" });
   };
   return (
     <form onSubmit={submit} className="mt-6 glass rounded-2xl p-6 space-y-4">

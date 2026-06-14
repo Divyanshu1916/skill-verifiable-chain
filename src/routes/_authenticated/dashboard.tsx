@@ -7,6 +7,7 @@ import { Sparkles, FileBadge, ShieldCheck, Hexagon, ArrowRight, ExternalLink, Co
 import { Button } from "@/components/ui/button";
 import { WalletCard } from "@/components/WalletCard";
 import { toast } from "sonner";
+import { WelcomeOverlay } from "@/components/WelcomeOverlay";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — SkillChain" }] }),
@@ -41,6 +42,7 @@ function Dashboard() {
 
   return (
     <AppShell title="Dashboard">
+      <WelcomeOverlay />
       <div className="space-y-6 max-w-6xl">
         {/* Greeting */}
         <div className="glass rounded-2xl p-6 md:p-8 relative overflow-hidden">
