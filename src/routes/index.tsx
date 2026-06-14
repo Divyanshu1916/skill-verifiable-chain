@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { WalletButton } from "@/components/WalletButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { NotificationBell } from "@/components/NotificationBell";
+import { UserMenu } from "@/components/UserMenu";
 import {
   Shield, Sparkles, Zap, Wallet, BadgeCheck, ArrowRight,
   FileBadge, Search, QrCode, Hexagon, BarChart3, PlayCircle, Star, Globe,
