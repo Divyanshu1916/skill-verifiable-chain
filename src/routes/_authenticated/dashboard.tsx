@@ -7,6 +7,7 @@ import { Sparkles, FileBadge, ShieldCheck, Hexagon, ArrowRight, ExternalLink, Co
 import { Button } from "@/components/ui/button";
 import { WalletCard } from "@/components/WalletCard";
 import { toast } from "sonner";
+import { WelcomeOverlay } from "@/components/WelcomeOverlay";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — SkillChain" }] }),
