@@ -99,6 +99,7 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
             <h1 className="hidden md:block font-display text-xl font-semibold truncate">{title}</h1>
           </div>
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <Button
               size="icon"
               variant="ghost"
