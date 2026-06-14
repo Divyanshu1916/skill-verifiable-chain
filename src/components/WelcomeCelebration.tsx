@@ -189,7 +189,9 @@ export function WelcomeCelebration({ userName, onContinue, autoNavigateMs = 5000
           transition={{ delay: 1.6, duration: 0.7 }}
           className="mt-6 text-base md:text-lg text-white/80 max-w-md mx-auto"
         >
-          Your learning journey starts here. Build skills, earn achievements, and grow with the community.
+          {variant === "returning"
+            ? "Continue your learning journey, track your progress, and unlock new achievements."
+            : "Your learning journey starts here. Build skills, earn achievements, and grow with the community."}
         </motion.p>
 
         <motion.div
