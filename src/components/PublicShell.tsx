@@ -4,6 +4,7 @@ import { Logo } from "./Logo";
 import { Button } from "./ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { NotificationBell } from "./NotificationBell";
+import { UserMenu } from "./UserMenu";
 import { useAuth } from "@/lib/auth-context";
 import { LayoutDashboard, LogIn, ArrowLeft } from "lucide-react";
 
