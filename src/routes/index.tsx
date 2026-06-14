@@ -29,6 +29,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Landing() {
+  const { user } = useAuth();
   return (
     <div className="min-h-screen relative">
 
