@@ -4,25 +4,43 @@ import { WelcomeCelebration } from "./WelcomeCelebration";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 
-const FLAG = "skillchain:welcome";
+const TRIGGER_FLAG = "skillchain:welcome";        // set on successful auth event
+const SESSION_FLAG = "skillchain:welcomeShown";   // per browser session (cleared on close)
 const MIN_MS = 5000;
 
 export function triggerWelcome() {
   try {
-    sessionStorage.setItem(FLAG, "1");
+    sessionStorage.setItem(TRIGGER_FLAG, "1");
   } catch {}
 }
 
 export function WelcomeOverlay() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [show, setShow] = useState(false);
+  const [variant, setVariant] = useState<"new" | "returning">("new");
   const [name, setName] = useState("there");
   const [shownAt, setShownAt] = useState<number | null>(null);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !user) return;
-    if (sessionStorage.getItem(FLAG) !== "1") return;
-    sessionStorage.removeItem(FLAG);
+    if (typeof window === "undefined") return;
+    if (loading || !user) return;
+
+    const freshAuth = sessionStorage.getItem(TRIGGER_FLAG) === "1";
+    const alreadyShown = sessionStorage.getItem(SESSION_FLAG) === "1";
+
+    let nextVariant: "new" | "returning" | null = null;
+    if (freshAuth) {
+      sessionStorage.removeItem(TRIGGER_FLAG);
+      nextVariant = "new";
+    } else if (!alreadyShown) {
+      // Returning authenticated user: browser/app reopen with existing session
+      nextVariant = "returning";
+    }
+
+    if (!nextVariant) return;
+
+    sessionStorage.setItem(SESSION_FLAG, "1");
+    setVariant(nextVariant);
     setShow(true);
     setShownAt(Date.now());
 
@@ -37,7 +55,7 @@ export function WelcomeOverlay() {
         const n = data?.full_name || data?.username;
         if (n) setName(String(n).split(" ")[0]);
       });
-  }, [user?.id]);
+  }, [user?.id, loading]);
 
   // Lock body scroll & block interaction while overlay is shown
   useEffect(() => {
@@ -53,7 +71,7 @@ export function WelcomeOverlay() {
   }, [show]);
 
   const handleContinue = () => {
-    if (shownAt && Date.now() - shownAt < MIN_MS) return; // enforce minimum
+    if (shownAt && Date.now() - shownAt < MIN_MS) return;
     setShow(false);
   };
 
@@ -62,6 +80,7 @@ export function WelcomeOverlay() {
       {show && (
         <WelcomeCelebration
           key="welcome"
+          variant={variant}
           userName={name}
           onContinue={handleContinue}
           autoNavigateMs={5000}

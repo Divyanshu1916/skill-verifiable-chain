@@ -8,11 +8,12 @@ interface Props {
   userName: string;
   onContinue: () => void;
   autoNavigateMs?: number;
+  variant?: "new" | "returning";
 }
 
 const GOLD_COLORS = ["#FFD700", "#FFC107", "#F5A623", "#FFEFB0", "#FFFFFF"];
 
-export function WelcomeCelebration({ userName, onContinue, autoNavigateMs = 5000 }: Props) {
+export function WelcomeCelebration({ userName, onContinue, autoNavigateMs = 5000, variant = "new" }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Confetti bursts
@@ -158,7 +159,7 @@ export function WelcomeCelebration({ userName, onContinue, autoNavigateMs = 5000
         >
           <Sparkles className="h-4 w-4" style={{ color: "#FFD700" }} />
           <span className="text-xs font-medium tracking-wider uppercase" style={{ color: "#FFEFB0" }}>
-            Welcome aboard
+            {variant === "returning" ? "Welcome back" : "Welcome aboard"}
           </span>
         </motion.div>
 
@@ -175,9 +176,11 @@ export function WelcomeCelebration({ userName, onContinue, autoNavigateMs = 5000
             textShadow: "0 0 40px rgba(255,215,0,0.4)",
           }}
         >
-          🎉 Welcome to SkillChain,
-          <br />
-          {userName}!
+          {variant === "returning" ? (
+            <>👋 Welcome Back,<br />{userName}!</>
+          ) : (
+            <>🎉 Welcome to SkillChain,<br />{userName}!</>
+          )}
         </motion.h1>
 
         <motion.p
@@ -186,7 +189,9 @@ export function WelcomeCelebration({ userName, onContinue, autoNavigateMs = 5000
           transition={{ delay: 1.6, duration: 0.7 }}
           className="mt-6 text-base md:text-lg text-white/80 max-w-md mx-auto"
         >
-          Your learning journey starts here. Build skills, earn achievements, and grow with the community.
+          {variant === "returning"
+            ? "Continue your learning journey, track your progress, and unlock new achievements."
+            : "Your learning journey starts here. Build skills, earn achievements, and grow with the community."}
         </motion.p>
 
         <motion.div
