@@ -92,7 +92,8 @@ export function AuthPage({ mode }: { mode: "signin" | "signup" }) {
 
 function GoogleButton() {
   const onClick = async () => {
-    const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/welcome" });
+    triggerWelcome();
+    const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
     if (res.error) toast.error("Google sign-in failed");
   };
   return (
