@@ -13,7 +13,7 @@ interface Props {
 
 const GOLD_COLORS = ["#FFD700", "#FFC107", "#F5A623", "#FFEFB0", "#FFFFFF"];
 
-export function WelcomeCelebration({ userName, onContinue, autoNavigateMs = 5000 }: Props) {
+export function WelcomeCelebration({ userName, onContinue, autoNavigateMs = 5000, variant = "new" }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Confetti bursts
