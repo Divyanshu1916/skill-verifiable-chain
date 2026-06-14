@@ -5,6 +5,7 @@ import { Logo } from "./Logo";
 import { WalletButton } from "./WalletButton";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "./ui/button";
+import { ThemeToggle } from "./ThemeToggle";
 
 const studentNav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
