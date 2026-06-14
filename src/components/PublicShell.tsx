@@ -2,6 +2,7 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { type ReactNode } from "react";
 import { Logo } from "./Logo";
 import { Button } from "./ui/button";
+import { ThemeToggle } from "./ThemeToggle";
 import { useAuth } from "@/lib/auth-context";
 import { LayoutDashboard, LogIn, ArrowLeft } from "lucide-react";
 
@@ -23,6 +24,7 @@ export function PublicShell({ children, title }: { children: ReactNode; title?: 
         </div>
         {title && <h1 className="hidden md:block font-display text-lg font-semibold text-muted-foreground">{title}</h1>}
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           {user ? (
             <Button asChild size="sm" variant="outline" className="gap-2"><Link to="/dashboard"><LayoutDashboard className="h-4 w-4" /> Dashboard</Link></Button>
           ) : (
