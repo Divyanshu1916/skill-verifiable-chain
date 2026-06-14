@@ -125,7 +125,7 @@ export function NotificationBell() {
                 return (
                   <li key={n.id}>
                     {n.href ? (
-                      <Link to={n.href} className={classes} onClick={() => markRead(n.id)}>
+                      <Link to={n.href as string} className={classes} onClick={() => markRead(n.id)}>
                         {body}
                       </Link>
                     ) : (
