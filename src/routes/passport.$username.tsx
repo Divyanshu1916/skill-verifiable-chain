@@ -116,7 +116,12 @@ function Passport() {
     <div className="min-h-screen">
       <header className="sticky top-0 z-30 glass border-b border-border/40">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Logo />
+          <div className="flex items-center gap-3">
+            <Button size="icon" variant="ghost" onClick={() => navigate({ to: "/dashboard" })} aria-label="Go back" className="h-9 w-9 -ml-1">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <Logo />
+          </div>
           <Button asChild size="sm" variant="outline"><Link to="/signup">Build yours</Link></Button>
         </div>
       </header>
