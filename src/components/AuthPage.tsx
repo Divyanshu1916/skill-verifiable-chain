@@ -45,7 +45,7 @@ export function AuthPage({ mode }: { mode: "signin" | "signup" }) {
       </div>
 
       {/* Form */}
-      <div className="flex items-center justify-center p-6 md:p-12 relative">
+      <div className="min-h-screen flex items-center justify-center p-6 md:p-12 relative">
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-6 flex items-center justify-between gap-3">
             <Logo />
