@@ -2,6 +2,7 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { type ReactNode } from "react";
 import { Logo } from "./Logo";
 import { Button } from "./ui/button";
+import { ThemeToggle } from "./ThemeToggle";
 import { useAuth } from "@/lib/auth-context";
 import { LayoutDashboard, LogIn, ArrowLeft } from "lucide-react";
 
