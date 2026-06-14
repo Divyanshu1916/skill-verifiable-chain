@@ -153,7 +153,8 @@ function SignUpForm() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Account created");
-    nav({ to: "/welcome" });
+    triggerWelcome();
+    nav({ to: "/dashboard" });
   };
   return (
     <form onSubmit={submit} className="mt-6 glass rounded-2xl p-6 space-y-4">
