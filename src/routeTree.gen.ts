@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ScanRouteImport } from './routes/scan'
 import { Route as RecruiterRouteImport } from './routes/recruiter'
@@ -32,6 +33,11 @@ import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authent
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 import { Route as AuthenticatedAdminFeedbackRouteImport } from './routes/_authenticated/admin.feedback'
 
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/recruiter': typeof RecruiterRoute
   '/scan': typeof ScanRoute
   '/signup': typeof SignupRoute
+  '/welcome': typeof WelcomeRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -176,6 +183,7 @@ export interface FileRoutesByTo {
   '/recruiter': typeof RecruiterRoute
   '/scan': typeof ScanRoute
   '/signup': typeof SignupRoute
+  '/welcome': typeof WelcomeRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -201,6 +209,7 @@ export interface FileRoutesById {
   '/recruiter': typeof RecruiterRoute
   '/scan': typeof ScanRoute
   '/signup': typeof SignupRoute
+  '/welcome': typeof WelcomeRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/certificates': typeof AuthenticatedCertificatesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -226,6 +235,7 @@ export interface FileRouteTypes {
     | '/recruiter'
     | '/scan'
     | '/signup'
+    | '/welcome'
     | '/analytics'
     | '/certificates'
     | '/dashboard'
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
     | '/recruiter'
     | '/scan'
     | '/signup'
+    | '/welcome'
     | '/analytics'
     | '/certificates'
     | '/dashboard'
@@ -273,6 +284,7 @@ export interface FileRouteTypes {
     | '/recruiter'
     | '/scan'
     | '/signup'
+    | '/welcome'
     | '/_authenticated/analytics'
     | '/_authenticated/certificates'
     | '/_authenticated/dashboard'
@@ -298,6 +310,7 @@ export interface RootRouteChildren {
   RecruiterRoute: typeof RecruiterRoute
   ScanRoute: typeof ScanRoute
   SignupRoute: typeof SignupRoute
+  WelcomeRoute: typeof WelcomeRoute
   NftIdRoute: typeof NftIdRoute
   PassportUsernameRoute: typeof PassportUsernameRoute
   VerifyCredentialIdRoute: typeof VerifyCredentialIdRoute
@@ -305,6 +318,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -501,6 +521,7 @@ const rootRouteChildren: RootRouteChildren = {
   RecruiterRoute: RecruiterRoute,
   ScanRoute: ScanRoute,
   SignupRoute: SignupRoute,
+  WelcomeRoute: WelcomeRoute,
   NftIdRoute: NftIdRoute,
   PassportUsernameRoute: PassportUsernameRoute,
   VerifyCredentialIdRoute: VerifyCredentialIdRoute,
