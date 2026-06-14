@@ -29,7 +29,7 @@ export function PublicShell({ children, title }: { children: ReactNode; title?: 
           {user && <NotificationBell />}
           <ThemeToggle />
           {user ? (
-            <Button asChild size="sm" variant="outline" className="gap-2"><Link to="/dashboard"><LayoutDashboard className="h-4 w-4" /> Dashboard</Link></Button>
+            <UserMenu />
           ) : (
             <Button asChild size="sm" className="gap-2 bg-gradient-to-r from-primary to-accent text-primary-foreground"><Link to="/auth"><LogIn className="h-4 w-4" /> Sign in</Link></Button>
           )}
