@@ -8,6 +8,7 @@ interface Props {
   userName: string;
   onContinue: () => void;
   autoNavigateMs?: number;
+  variant?: "new" | "returning";
 }
 
 const GOLD_COLORS = ["#FFD700", "#FFC107", "#F5A623", "#FFEFB0", "#FFFFFF"];
