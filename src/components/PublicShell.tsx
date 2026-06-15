@@ -28,11 +28,10 @@ export function PublicShell({ children, title }: { children: ReactNode; title?: 
         <div className="flex items-center gap-2">
           {user && <NotificationBell />}
           <ThemeToggle />
-          {user ? (
-            <UserMenu />
-          ) : (
-            <Button asChild size="sm" className="gap-2 bg-gradient-to-r from-primary to-accent text-primary-foreground"><Link to="/auth"><LogIn className="h-4 w-4" /> Sign in</Link></Button>
+          {!user && (
+            <Button asChild size="sm" className="hidden sm:inline-flex gap-2 bg-gradient-to-r from-primary to-accent text-primary-foreground"><Link to="/auth"><LogIn className="h-4 w-4" /> Sign in</Link></Button>
           )}
+          <UserMenu />
         </div>
       </header>
       <main className="flex-1 p-4 md:p-8">{children}</main>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Menu, Home, LayoutDashboard, Star, User as UserIcon, Settings, LogOut, Wallet, TrendingUp, CheckCircle2 } from "lucide-react";
+import { Menu, Home, LayoutDashboard, Star, User as UserIcon, Settings, LogOut, Wallet, TrendingUp, CheckCircle2, LogIn, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -31,7 +31,10 @@ export function UserMenu() {
   const [profile, setProfile] = useState<ProfileLite | null>(null);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setProfile(null);
+      return;
+    }
     supabase
       .from("profiles")
       .select("full_name, username, avatar_url, wallet_address, reputation_score")
@@ -39,8 +42,6 @@ export function UserMenu() {
       .maybeSingle()
       .then(({ data }) => setProfile(data as ProfileLite | null));
   }, [user?.id, open]);
-
-  if (!user) return null;
 
   const items = [
     { to: "/" as const, label: "Home", icon: Home },
@@ -54,8 +55,8 @@ export function UserMenu() {
     nav({ to: "/" });
   };
 
-  const displayName = profile?.full_name || user.user_metadata?.full_name || user.email?.split("@")[0] || "User";
-  const avatarUrl = profile?.avatar_url || (user.user_metadata?.avatar_url as string | undefined);
+  const displayName = profile?.full_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
+  const avatarUrl = profile?.avatar_url || (user?.user_metadata?.avatar_url as string | undefined);
   const username = profile?.username;
   const wallet = profile?.wallet_address;
   const rep = profile?.reputation_score ?? 0;
@@ -67,7 +68,10 @@ export function UserMenu() {
           <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-[88vw] sm:w-[380px] p-0 glass-strong border-l border-border/60 flex flex-col">
+      <SheetContent
+        side="right"
+        className="w-[88vw] sm:w-[380px] p-0 glass-strong border-l border-border/60 flex flex-col gap-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right"
+      >
         <SheetHeader className="px-5 pt-5 pb-3">
           <SheetTitle className="font-display text-base tracking-wide text-muted-foreground">Menu</SheetTitle>
         </SheetHeader>
@@ -80,7 +84,7 @@ export function UserMenu() {
                 key={it.to}
                 to={it.to}
                 onClick={() => setOpen(false)}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all ${
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all active:scale-[0.98] ${
                   active
                     ? "bg-gradient-to-r from-primary/15 to-accent/15 text-foreground border border-primary/20"
                     : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
@@ -93,64 +97,92 @@ export function UserMenu() {
           })}
         </nav>
 
-        <div className="mt-auto border-t border-border/40 p-4 space-y-4 bg-card/40 backdrop-blur-xl">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-12 w-12 ring-2 ring-primary/30">
-              {avatarUrl ? <AvatarImage src={avatarUrl} alt={displayName} /> : null}
-              <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground font-semibold">
-                {initials(displayName, user.email)}
-              </AvatarFallback>
-            </Avatar>
-            <div className="min-w-0 flex-1">
-              <div className="text-sm font-semibold truncate">{displayName}</div>
-              <div className="text-xs text-muted-foreground truncate">{user.email}</div>
+        <div className="mt-auto" />
+
+        {user ? (
+          <div className="border-t border-border/40 p-4 space-y-4 bg-card/40 backdrop-blur-xl">
+            <div className="text-[11px] font-display tracking-[0.18em] uppercase text-muted-foreground/80">
+              Account
+            </div>
+            <div className="flex items-center gap-3">
+              <Avatar className="h-12 w-12 ring-2 ring-primary/30">
+                {avatarUrl ? <AvatarImage src={avatarUrl} alt={displayName} /> : null}
+                <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground font-semibold">
+                  {initials(displayName, user.email)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-semibold truncate">{displayName}</div>
+                <div className="text-xs text-muted-foreground truncate">{user.email}</div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 flex-wrap">
+              <Badge variant="outline" className="gap-1.5 border-border/60">
+                <Wallet className="h-3 w-3" />
+                {wallet ? (
+                  <>
+                    <CheckCircle2 className="h-3 w-3 text-success" />
+                    <span className="font-mono text-[10px]">{shortAddress(wallet)}</span>
+                  </>
+                ) : (
+                  <span className="text-muted-foreground">Not connected</span>
+                )}
+              </Badge>
+              <Badge className="gap-1.5 bg-gradient-to-r from-primary/20 to-accent/20 text-foreground border border-primary/30">
+                <TrendingUp className="h-3 w-3" />
+                Rep {rep}
+              </Badge>
+            </div>
+
+            <div className="grid grid-cols-1 gap-1">
+              {username && (
+                <Link
+                  to="/passport/$username"
+                  params={{ username }}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent/50 hover:text-foreground transition active:scale-[0.98]"
+                >
+                  <UserIcon className="h-4 w-4" /> View Profile
+                </Link>
+              )}
+              <Link
+                to="/dashboard"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent/50 hover:text-foreground transition active:scale-[0.98]"
+              >
+                <Settings className="h-4 w-4" /> Account Settings
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition text-left active:scale-[0.98]"
+              >
+                <LogOut className="h-4 w-4" /> Logout
+              </button>
             </div>
           </div>
-
-          <div className="flex items-center gap-2 flex-wrap">
-            <Badge variant="outline" className="gap-1.5 border-border/60">
-              <Wallet className="h-3 w-3" />
-              {wallet ? (
-                <>
-                  <CheckCircle2 className="h-3 w-3 text-success" />
-                  <span className="font-mono text-[10px]">{shortAddress(wallet)}</span>
-                </>
-              ) : (
-                <span className="text-muted-foreground">Not connected</span>
-              )}
-            </Badge>
-            <Badge className="gap-1.5 bg-gradient-to-r from-primary/20 to-accent/20 text-foreground border border-primary/30">
-              <TrendingUp className="h-3 w-3" />
-              Rep {rep}
-            </Badge>
-          </div>
-
-          <div className="grid grid-cols-1 gap-1">
-            {username && (
-              <Link
-                to="/passport/$username"
-                params={{ username }}
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent/50 hover:text-foreground transition"
-              >
-                <UserIcon className="h-4 w-4" /> View Profile
-              </Link>
-            )}
-            <Link
-              to="/dashboard"
+        ) : (
+          <div className="border-t border-border/40 p-4 space-y-2 bg-card/40 backdrop-blur-xl">
+            <div className="text-[11px] font-display tracking-[0.18em] uppercase text-muted-foreground/80 mb-1">
+              Account
+            </div>
+            <Button
+              asChild
+              className="w-full justify-start gap-2 bg-gradient-to-r from-primary to-accent text-primary-foreground"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent/50 hover:text-foreground transition"
             >
-              <Settings className="h-4 w-4" /> Account Settings
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition text-left"
+              <Link to="/auth"><LogIn className="h-4 w-4" /> Sign In</Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="w-full justify-start gap-2 border-primary/30"
+              onClick={() => setOpen(false)}
             >
-              <LogOut className="h-4 w-4" /> Logout
-            </button>
+              <Link to="/auth"><UserPlus className="h-4 w-4" /> Create Account</Link>
+            </Button>
           </div>
-        </div>
+        )}
       </SheetContent>
     </Sheet>
   );
